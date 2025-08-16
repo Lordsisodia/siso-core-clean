@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -7,7 +7,7 @@ import { TodoItem, ClientData } from '@/types/client.types';
 import { TodoList } from '@/components/admin/clients/TodoList';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Circle, Clock, FilterIcon } from 'lucide-react';
+import { CheckCircle, Circle, Clock, FilterIcon, Users, Package, MessageSquare } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -18,6 +18,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ClientDashboardLayout } from "@/components/client/ClientDashboardLayout";
+import { TeamActivityFeed } from '@/components/client/collaboration/TeamActivityFeed';
+import { DeliverablesSection } from '@/components/client/collaboration/DeliverablesSection';
+import { TeamChatSection } from '@/components/client/collaboration/TeamChatSection';
 
 export default function ClientTasksPage() {
   const [client, setClient] = useState<ClientData | null>(null);
@@ -162,83 +165,134 @@ export default function ClientTasksPage() {
 
   return (
     <ClientDashboardLayout>
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-slate-900">Your Tasks</h1>
+      <div className="max-w-6xl mx-auto space-y-6">
+        <h1 className="text-3xl font-bold text-white">Work in Progress</h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <Card className="p-5 border border-slate-200">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="p-5 border-slate-700 bg-slate-800">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-full">
-                <CheckCircle className="h-5 w-5 text-blue-500" />
+              <div className="p-2 bg-blue-500/10 rounded-full">
+                <CheckCircle className="h-5 w-5 text-blue-400" />
               </div>
               <div>
-                <p className="text-sm text-slate-500">Total Tasks</p>
-                <p className="text-2xl font-semibold">{stats.total}</p>
+                <p className="text-sm text-gray-400">Total Tasks</p>
+                <p className="text-2xl font-semibold text-white">{stats.total}</p>
               </div>
             </div>
           </Card>
           
-          <Card className="p-5 border border-slate-200">
+          <Card className="p-5 border-slate-700 bg-slate-800">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-full">
-                <CheckCircle className="h-5 w-5 text-green-500" />
+              <div className="p-2 bg-green-500/10 rounded-full">
+                <CheckCircle className="h-5 w-5 text-green-400" />
               </div>
               <div>
-                <p className="text-sm text-slate-500">Completed</p>
-                <p className="text-2xl font-semibold">{stats.completed}</p>
+                <p className="text-sm text-gray-400">Completed</p>
+                <p className="text-2xl font-semibold text-white">{stats.completed}</p>
               </div>
             </div>
           </Card>
           
-          <Card className="p-5 border border-slate-200">
+          <Card className="p-5 border-slate-700 bg-slate-800">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-yellow-100 rounded-full">
-                <Clock className="h-5 w-5 text-yellow-500" />
+              <div className="p-2 bg-yellow-500/10 rounded-full">
+                <Clock className="h-5 w-5 text-yellow-400" />
               </div>
               <div>
-                <p className="text-sm text-slate-500">Pending</p>
-                <p className="text-2xl font-semibold">{stats.pending}</p>
+                <p className="text-sm text-gray-400">Pending</p>
+                <p className="text-2xl font-semibold text-white">{stats.pending}</p>
               </div>
             </div>
           </Card>
         </div>
+
+        {/* Team Activity Section */}
+        <Card className="border-slate-700 bg-slate-800">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-blue-400" />
+              Team Working Now
+              <Badge variant="outline" className="bg-green-400/10 text-green-400 border-green-400/30">
+                LIVE
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TeamActivityFeed clientId={client?.id || ''} />
+          </CardContent>
+        </Card>
         
-        <Card className="p-6 border border-slate-200">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <h2 className="text-xl font-semibold">Task List</h2>
+        {/* Tasks Section */}
+        <Card className="border-slate-700 bg-slate-800">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-purple-400" />
+              🎯 Need Your Input
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+              <p className="text-sm text-gray-400">Tasks that require your attention</p>
+              
+              <div className="flex items-center gap-3">
+                <Select value={filter} onValueChange={(value: any) => setFilter(value)}>
+                  <SelectTrigger className="w-[180px] bg-slate-700 border-slate-600">
+                    <SelectValue placeholder="Filter by status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Filter</SelectLabel>
+                      <SelectItem value="all">All Tasks</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
             
-            <div className="flex items-center gap-3">
-              <Select value={filter} onValueChange={(value: any) => setFilter(value)}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Filter</SelectLabel>
-                    <SelectItem value="all">All Tasks</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="pending">Pending</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          
-          {client?.todos && client.todos.length > 0 ? (
-            <TodoList 
-              todos={filteredTodos()} 
-              onUpdate={handleUpdateTodos} 
-              clientId={client.id} 
-            />
-          ) : (
-            <div className="text-center py-8">
-              <Circle className="h-12 w-12 mx-auto text-slate-300 mb-3" />
-              <h3 className="text-lg font-medium mb-1">No Tasks Available</h3>
-              <p className="text-slate-500">
-                You don't have any tasks assigned currently.
-              </p>
-            </div>
-          )}
+            {client?.todos && client.todos.length > 0 ? (
+              <TodoList 
+                todos={filteredTodos()} 
+                onUpdate={handleUpdateTodos} 
+                clientId={client.id} 
+              />
+            ) : (
+              <div className="text-center py-8">
+                <Circle className="h-12 w-12 mx-auto text-gray-600 mb-3" />
+                <h3 className="text-lg font-medium mb-1 text-white">No Tasks Available</h3>
+                <p className="text-gray-400">
+                  You don't have any tasks assigned currently.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Deliverables Section */}
+        <Card className="border-slate-700 bg-slate-800">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Package className="h-5 w-5 text-amber-400" />
+              📦 Recent Deliverables
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DeliverablesSection clientId={client?.id || ''} />
+          </CardContent>
+        </Card>
+
+        {/* Team Chat Section */}
+        <Card className="border-slate-700 bg-slate-800">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MessageSquare className="h-5 w-5 text-green-400" />
+              💬 Team Chat
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TeamChatSection clientId={client?.id || ''} />
+          </CardContent>
         </Card>
       </div>
     </ClientDashboardLayout>
