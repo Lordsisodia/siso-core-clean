@@ -45,6 +45,8 @@ import DecoraPlan from './pages/DecoraPlan';
 import PublicPlanView from './pages/PublicPlanView';
 import Congratulations from './pages/onboarding/congratulations';
 import Home from './pages/Home';
+import IntegratedDashboard from './pages/IntegratedDashboard';
+import EnhancedDashboard from './pages/EnhancedDashboard';
 import CryptoExchange from './pages/CryptoExchange';
 import HowToEarn from './pages/HowToEarn';
 import LeaderboardPage from './pages/LeaderboardPage';
@@ -73,6 +75,17 @@ import ClientStatusPage from "./pages/client/ClientStatusPage";
 import ClientSupportPage from "./pages/client/ClientSupportPage";
 import MoodBoardPage from "./pages/client/MoodBoardPage";
 import QuickSetupPage from "./pages/client/QuickSetupPage";
+import ClientOnboardingPage from "./pages/client/ClientOnboardingPage";
+import ClientQuickSetupPage from "./pages/client/ClientQuickSetupPage";
+import ClientDesignPreferencesPage from "./pages/client/ClientDesignPreferencesPage";
+import ClientProjectRoadmapPage from "./pages/client/ClientProjectRoadmapPage";
+import ClientProgressiveUnlockPage from "./pages/client/ClientProgressiveUnlockPage";
+import ClientWorkInProgressPage from "./pages/client/ClientWorkInProgressPage";
+import ClientLaunchPreparationPage from "./pages/client/ClientLaunchPreparationPage";
+import ClientLiveMaintenancePage from "./pages/client/ClientLiveMaintenancePage";
+import ClientAppPlanPage from "./pages/client/ClientAppPlanPage";
+import ClientTimelinePage from "./pages/client/ClientTimelinePage";
+import ClientAgentTeamsPage from "./pages/client/ClientAgentTeamsPage";
 import ProjectsAndTasksPage from './pages/ProjectsAndTasksPage';
 import DocumentLibraryPage from './pages/resources/DocumentLibraryPage';
 import ProjectDetailsPage from './pages/ProjectDetailsPage';
@@ -293,8 +306,8 @@ function App() {
           <Route path="/automation" element={<AuthGuard adminOnly={true}><AutomationPage /></AuthGuard>} />
           <Route path="/admin/automation" element={<AuthGuard adminOnly={true}><AutomationPage /></AuthGuard>} />
           
-          {/* Protected Dashboard Routes */}
-          <Route path="/home" element={<AuthGuard><Home /></AuthGuard>} />
+          {/* Dashboard Routes - No auth required for home */}
+          <Route path="/home" element={<EnhancedDashboard />} />
           
           {/* Protected Project Routes */}
           <Route path="/projects" element={<AuthGuard><ProjectsAndTasksPage /></AuthGuard>} />
@@ -358,6 +371,25 @@ function App() {
           <Route path="/client-dashboard/support" element={<AuthGuard><ClientSupportPage /></AuthGuard>} />
           <Route path="/client-dashboard/mood-board" element={<AuthGuard><MoodBoardPage /></AuthGuard>} />
           <Route path="/client-dashboard/quick-setup" element={<AuthGuard><QuickSetupPage /></AuthGuard>} />
+          
+          {/* New Client Feature Pages */}
+          <Route path="/client/onboarding" element={<ClientOnboardingPage />} />
+          <Route path="/client/quick-setup" element={<ClientQuickSetupPage />} />
+          <Route path="/client/mood-board" element={<ClientDesignPreferencesPage />} />
+          <Route path="/client/app-plan" element={<ClientAppPlanPage />} />
+          <Route path="/client/timeline" element={<ClientTimelinePage />} />
+          <Route path="/client/agent-teams" element={<ClientAgentTeamsPage />} />
+          <Route path="/client/payments" element={<PaymentsPage />} />
+          <Route path="/client/development" element={<ClientWorkInProgressPage />} />
+          <Route path="/client/testing" element={<ClientProjectRoadmapPage />} />
+          <Route path="/client/launch" element={<ClientLaunchPreparationPage />} />
+          {/* Legacy routes - keep for compatibility */}
+          <Route path="/client/design-preferences" element={<ClientDesignPreferencesPage />} />
+          <Route path="/client/work-in-progress" element={<ClientWorkInProgressPage />} />
+          <Route path="/client/project-roadmap" element={<ClientProjectRoadmapPage />} />
+          <Route path="/client/launch-preparation" element={<ClientLaunchPreparationPage />} />
+          <Route path="/client/live-maintenance" element={<ClientLiveMaintenancePage />} />
+          <Route path="/client/progressive-unlock" element={<ClientProgressiveUnlockPage />} />
 
           {/* Testing Dashboard Route */}
           <Route path="/testing" element={<AppPlanTestingDashboard />} />

@@ -65,6 +65,9 @@ export const SidebarSection = ({
             collapsed={collapsed}
             onClick={onItemClick}
             isActive={isItemActive(item.href)}
+            badge={item.badge}
+            badgeColor={item.badgeColor}
+            disabled={item.disabled}
           />
         ))}
       </motion.div>

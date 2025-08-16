@@ -15,10 +15,11 @@ export type QuickSetupStep = 'intro' | 'voice' | 'mood-board' | 'complete';
 
 interface QuickSetupFlowProps {
   onComplete?: (data: any) => void;
+  onSkip?: () => void;
 }
 
 // Inner component that uses the context
-function QuickSetupContent({ onComplete }: QuickSetupFlowProps) {
+function QuickSetupContent({ onComplete, onSkip }: QuickSetupFlowProps) {
   const navigate = useNavigate();
   const { 
     currentStep, 
@@ -85,7 +86,7 @@ function QuickSetupContent({ onComplete }: QuickSetupFlowProps) {
                           currentStep === 'mood-board' ? 1 : 2;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background/95 to-background">
+    <div className="min-h-screen bg-siso-bg">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-10 bg-background/80 backdrop-blur-sm border-b">
         <div className="container mx-auto px-4 py-4">
@@ -175,8 +176,8 @@ function QuickSetupContent({ onComplete }: QuickSetupFlowProps) {
                   className="inline-block mb-6"
                 >
                   <div className="relative">
-                    <div className="w-24 h-24 bg-gradient-to-br from-primary to-primary/60 rounded-full flex items-center justify-center">
-                      <Sparkles className="h-12 w-12 text-white" />
+                    <div className="w-24 h-24 bg-siso-red rounded-full flex items-center justify-center">
+                      <Sparkles className="h-12 w-12 text-siso-text-bold" />
                     </div>
                     <motion.div
                       animate={{ rotate: 360 }}
@@ -184,13 +185,13 @@ function QuickSetupContent({ onComplete }: QuickSetupFlowProps) {
                       className="absolute inset-0"
                     >
                       <div className="absolute top-0 right-0 w-3 h-3 bg-yellow-400 rounded-full" />
-                      <div className="absolute bottom-0 left-0 w-2 h-2 bg-blue-400 rounded-full" />
-                      <div className="absolute top-1/2 right-0 w-2 h-2 bg-purple-400 rounded-full" />
+                      <div className="absolute bottom-0 left-0 w-2 h-2 bg-siso-orange rounded-full" />
+                      <div className="absolute top-1/2 right-0 w-2 h-2 bg-siso-red rounded-full" />
                     </motion.div>
                   </div>
                 </motion.div>
 
-                <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold mb-4 text-siso-text-bold">
                   Welcome to Quick Setup!
                 </h1>
                 
@@ -306,7 +307,7 @@ function QuickSetupContent({ onComplete }: QuickSetupFlowProps) {
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", duration: 0.5, delay: 0.1 }}
                 >
-                  <CheckCircle className="h-20 w-20 text-green-500 mx-auto mb-6" />
+                  <CheckCircle className="h-20 w-20 text-siso-orange mx-auto mb-6" />
                 </motion.div>
 
                 <h2 className="text-3xl font-bold mb-4">Setup Complete!</h2>

@@ -12,9 +12,10 @@ export type OnboardingMode = 'chat' | 'voice' | null;
 
 interface OnboardingFlowProps {
   onComplete: (data: any) => void;
+  onSkip?: () => void;
 }
 
-export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
+export function OnboardingFlow({ onComplete, onSkip }: OnboardingFlowProps) {
   const [mode, setMode] = useState<OnboardingMode>(null);
   const { session, resumeSession } = useOnboardingSession();
 

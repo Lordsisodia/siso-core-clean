@@ -107,22 +107,12 @@ export const useAuthSession = () => {
           // Determine if user is new - they haven't completed onboarding or have no projects
           const isNewUser = !profile?.onboarding_completed || (projects && projects.length === 0);
           
-          // Redirect admin users to the admin dashboard
-          if (adminStatus) {
-            toast({
-              title: "Admin Access Detected",
-              description: "Redirecting to admin dashboard."
-            });
-            navigate('/admin', { replace: true });
-          } 
-          // For all other users (new and existing), go to home
-          else {
-            toast({
-              title: "Successfully signed in",
-              description: "Welcome to SISO Resource Hub!",
-            });
-            navigate('/home', { replace: true });
-          }
+          // Only show welcome toast, don't redirect
+          // Let Auth.tsx handle the redirect to /home
+          toast({
+            title: "Successfully signed in",
+            description: "Welcome to SISO Resource Hub!",
+          });
         }
       } else if (event === 'SIGNED_OUT') {
         setUser(null);

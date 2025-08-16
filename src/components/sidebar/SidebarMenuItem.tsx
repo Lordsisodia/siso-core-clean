@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 import {
   Tooltip,
   TooltipContent,
@@ -18,6 +19,9 @@ interface SidebarMenuItemProps {
   className?: string;
   isMain?: boolean;
   isActive?: boolean;
+  badge?: string;
+  badgeColor?: 'green' | 'orange' | 'gray' | 'purple' | 'red';
+  disabled?: boolean;
 }
 
 export const SidebarMenuItem = ({
@@ -28,7 +32,10 @@ export const SidebarMenuItem = ({
   onClick,
   className,
   isMain,
-  isActive
+  isActive,
+  badge,
+  badgeColor = 'gray',
+  disabled
 }: SidebarMenuItemProps) => {
   // [Analysis] Improved spring animations for smoother transitions
   const menuItemVariants = {
@@ -76,30 +83,49 @@ export const SidebarMenuItem = ({
     }
   };
 
+  const getBadgeColor = () => {
+    switch (badgeColor) {
+      case 'green':
+        return 'bg-siso-orange/20 text-siso-orange border-siso-orange/40';
+      case 'orange':
+        return 'bg-siso-orange/20 text-siso-orange border-siso-orange/40';
+      case 'purple':
+        return 'bg-siso-red/20 text-siso-red border-siso-red/40';
+      case 'red':
+        return 'bg-siso-red/20 text-siso-red border-siso-red/40';
+      default:
+        return 'bg-siso-border text-siso-text-muted border-siso-border';
+    }
+  };
+
+  const LinkComponent = disabled ? 'div' : Link;
+  const linkProps = disabled ? {} : { to: href };
+
   const menuItem = (
     <motion.div
       initial="initial"
       animate="animate"
       exit="exit"
       variants={menuItemVariants}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className="relative"
+      whileHover={!disabled ? { scale: 1.02 } : {}}
+      whileTap={!disabled ? { scale: 0.98 } : {}}
+      className={cn("relative", disabled && "opacity-50 cursor-not-allowed")}
     >
-      <Link
-        to={href}
-        onClick={onClick}
+      <LinkComponent
+        {...linkProps}
+        onClick={disabled ? undefined : onClick}
         className={cn(
           'relative flex items-center gap-3 rounded-lg px-3 py-2 text-siso-text transition-all duration-300',
-          isActive && 'bg-gradient-to-r from-siso-red/10 to-siso-orange/10 text-siso-text-bold shadow-sm',
-          !isActive && 'hover:bg-gradient-to-r hover:from-siso-red/5 hover:to-siso-orange/5 hover:text-siso-text-bold',
+          isActive && !disabled && 'bg-gradient-to-r from-siso-red/10 to-siso-orange/10 text-siso-text-bold shadow-sm',
+          !isActive && !disabled && 'hover:bg-gradient-to-r hover:from-siso-red/5 hover:to-siso-orange/5 hover:text-siso-text-bold',
           isMain ? 'text-base font-semibold' : 'text-sm',
           collapsed ? 'justify-center' : '',
+          disabled && 'pointer-events-none',
           className
         )}
       >
         <motion.div
-          whileHover={{ scale: 1.1 }}
+          whileHover={!disabled ? { scale: 1.1 } : {}}
           transition={{ 
             type: "spring", 
             stiffness: 400, 
@@ -107,13 +133,24 @@ export const SidebarMenuItem = ({
           }}
           className="relative"
         >
-          <Icon 
-            className={cn(
-              isMain ? "w-5 h-5" : "w-4 h-4",
-              isActive ? "text-siso-orange" : "text-siso-text group-hover:text-siso-orange",
-              "transition-colors duration-300"
-            )} 
-          />
+          {disabled && badge === 'Locked' ? (
+            <Lock 
+              className={cn(
+                isMain ? "w-5 h-5" : "w-4 h-4",
+                "text-siso-text-muted",
+                "transition-colors duration-300"
+              )} 
+            />
+          ) : (
+            <Icon 
+              className={cn(
+                isMain ? "w-5 h-5" : "w-4 h-4",
+                isActive ? "text-siso-orange" : "text-siso-text group-hover:text-siso-orange",
+                disabled && "text-siso-text-muted",
+                "transition-colors duration-300"
+              )} 
+            />
+          )}
           {isActive && (
             <motion.div 
               className="absolute inset-0 blur-lg bg-siso-orange/30 -z-10"
@@ -132,7 +169,7 @@ export const SidebarMenuItem = ({
 
         <AnimatePresence mode="wait">
           {!collapsed && (
-            <motion.span
+            <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
@@ -142,10 +179,18 @@ export const SidebarMenuItem = ({
                 damping: 25,
                 mass: 1.2
               }}
-              className="truncate font-medium"
+              className="flex items-center gap-2 flex-1"
             >
-              {label}
-            </motion.span>
+              <span className="truncate font-medium">{label}</span>
+              {badge && (
+                <Badge 
+                  variant="secondary" 
+                  className={cn("text-xs", getBadgeColor())}
+                >
+                  {badge}
+                </Badge>
+              )}
+            </motion.div>
           )}
         </AnimatePresence>
 
@@ -177,7 +222,7 @@ export const SidebarMenuItem = ({
             </motion.div>
           </motion.div>
         )}
-      </Link>
+      </LinkComponent>
     </motion.div>
   );
 

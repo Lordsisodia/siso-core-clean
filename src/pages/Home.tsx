@@ -4,7 +4,7 @@ import { DashboardLayout } from '@/components/dashboard/layout/DashboardLayout';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users } from 'lucide-react';
+import { Users, LogIn, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { WelcomeHeader } from '@/components/dashboard/WelcomeHeader';
@@ -32,6 +32,39 @@ export default function Home() {
       </Helmet>
       
       <div className="container mx-auto px-4 py-8">
+        {/* Show login/signup prompt for non-authenticated users */}
+        {!user && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <Card className="bg-siso-bg-alt border-siso-border">
+              <CardHeader>
+                <CardTitle className="text-2xl text-siso-text-bold">Welcome to SISO Resource Hub</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-siso-text">
+                  Sign in or create an account to access all features, save your projects, and collaborate with our AI agents.
+                </p>
+                <div className="flex gap-4">
+                  <Button asChild size="lg" className="bg-siso-red hover:bg-siso-red/90">
+                    <Link to="/auth">
+                      <LogIn className="mr-2 h-4 w-4" />
+                      Sign In
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="border-siso-border text-siso-text hover:bg-siso-bg">
+                    <Link to="/auth">
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Sign Up
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
         {/* Welcome Header */}
         <WelcomeHeader />
         
@@ -79,7 +112,7 @@ export default function Home() {
             ) : error ? (
               <div className="flex flex-col items-center justify-center p-8 text-center rounded-lg bg-black/30 border border-white/10">
                 <AlertCircle className="h-12 w-12 text-[#ea384c] mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-siso-text-bold mb-2">
                   Failed to Load Project Details
                 </h3>
                 <p className="text-gray-400 mb-4 max-w-md">
@@ -119,7 +152,7 @@ export default function Home() {
                   <Users className="h-6 w-6 text-siso-orange" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-white">Admin Dashboard</h3>
+                  <h3 className="text-xl font-semibold text-siso-text-bold">Admin Dashboard</h3>
                   <p className="text-muted-foreground">Manage clients, templates, and organization settings</p>
                 </div>
                 <Button asChild>

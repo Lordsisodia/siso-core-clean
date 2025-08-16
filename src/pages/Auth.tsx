@@ -51,7 +51,8 @@ export default function Auth() {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate('/home', { replace: true });
+        // Don't auto-redirect if already logged in - let user stay on auth page if they want
+        // navigate('/home', { replace: true });
       }
     };
     
@@ -103,9 +104,8 @@ export default function Auth() {
             : "Welcome to SISO Agency Platform",
         });
         
-        // Navigate to appropriate dashboard
-        const redirectTo = partnerContext?.returnTo || '/home';
-        navigate(redirectTo);
+        // Always navigate to home after signup
+        navigate('/home');
       } else {
         // Handle sign in
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -120,20 +120,8 @@ export default function Auth() {
           description: "Successfully signed in",
         });
         
-        // Check if user is a partner and redirect accordingly
-        if (data.user) {
-          const { data: profile } = await supabase
-            .from('partner_profiles')
-            .select('*')
-            .eq('user_id', data.user.id)
-            .single();
-            
-          if (profile) {
-            navigate('/partner-dashboard');
-          } else {
-            navigate('/home');
-          }
-        }
+        // Always navigate to home after signin
+        navigate('/home');
       }
     } catch (error: any) {
       console.error('Auth error:', error);
@@ -164,7 +152,7 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-siso-bg to-black/95 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-siso-bg p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -178,7 +166,7 @@ export default function Auth() {
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 className="flex items-center justify-center gap-2 mx-auto px-4 py-2 
-                  bg-gradient-to-r from-orange-500/20 to-orange-600/20 rounded-full 
+                  bg-siso-orange/20 rounded-full 
                   border border-orange-500/40"
               >
                 <Award className="w-5 h-5 text-orange-400" />
@@ -222,7 +210,7 @@ export default function Auth() {
                         <Input 
                           placeholder="youremail@example.com" 
                           {...field} 
-                          className="bg-black/20 border-siso-text/20 text-white"
+                          className="bg-siso-bg border-siso-border text-siso-text"
                         />
                       </FormControl>
                       <FormMessage />
@@ -241,7 +229,7 @@ export default function Auth() {
                           type={showPassword ? "text" : "password"} 
                           placeholder="••••••••" 
                           {...field} 
-                          className="bg-black/20 border-siso-text/20 text-white"
+                          className="bg-siso-bg border-siso-border text-siso-text"
                         />
                       </FormControl>
                       <FormMessage />
@@ -251,7 +239,7 @@ export default function Auth() {
                 
                 <Button 
                   type="submit"
-                  className="w-full bg-gradient-to-r from-siso-red to-siso-orange hover:opacity-90"
+                  className="w-full bg-siso-red hover:bg-siso-red/90"
                   disabled={isLoading}
                 >
                   {isLoading ? 'Processing...' : isSignUp ? 'Create Account' : 'Sign In'}
@@ -284,7 +272,7 @@ export default function Auth() {
               <Button 
                 variant="outline" 
                 onClick={() => window.location.href = '/testing'}
-                className="bg-black/30 border-white/20 text-white hover:bg-black/50"
+                className="bg-siso-bg-alt border-siso-border text-siso-text hover:bg-siso-bg"
               >
                 🧪 Access AI Testing Dashboard
               </Button>

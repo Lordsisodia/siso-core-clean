@@ -22,7 +22,7 @@ export function MainProjectCard() {
         transition={{ duration: 0.4, delay: 0.2 }}
         className="mb-6"
       >
-        <Card className="border border-siso-border/20 bg-gradient-to-br from-black/40 to-siso-bg/10">
+        <Card className="border border-siso-border bg-siso-bg-alt">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-6">
               <div className="md:w-1/4 flex-shrink-0 flex justify-center md:justify-start">
@@ -54,20 +54,20 @@ export function MainProjectCard() {
         className="mb-6"
       >
         <Card 
-          className="bg-black/30 backdrop-blur-sm border border-white/10 shadow-lg hover:border-orange-500/40 cursor-pointer transition-all duration-300"
+          className="bg-siso-bg-alt border border-siso-border shadow-lg hover:border-siso-orange/40 cursor-pointer transition-all duration-300"
           onClick={() => navigate('/onboarding')}
         >
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="md:w-1/4 flex-shrink-0 flex justify-center md:justify-start">
-                <div className="h-24 w-24 rounded-full bg-gradient-to-br from-orange-500/20 to-red-500/10 flex items-center justify-center ring-4 ring-orange-500/20">
+                <div className="h-24 w-24 rounded-full bg-siso-orange/20 flex items-center justify-center ring-4 ring-siso-orange/20">
                   <FolderPlus size={42} className="text-orange-500" />
                 </div>
               </div>
               
               <div className="md:w-3/4 space-y-4 text-center md:text-left">
                 <div>
-                  <h2 className="text-2xl font-bold text-white">Create Your First Project</h2>
+                  <h2 className="text-2xl font-bold text-siso-text-bold">Create Your First Project</h2>
                   <p className="text-gray-300 text-sm">
                     {clientData ? `Welcome ${clientData.company_name || clientData.contact_name}! ` : ''}
                     Get started by creating your first project with SISO Agency.
@@ -76,7 +76,7 @@ export function MainProjectCard() {
                 
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Button 
-                    className="bg-orange-600 hover:bg-orange-700 text-white"
+                    className="bg-siso-red hover:bg-siso-red/90"
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate('/onboarding');
@@ -88,7 +88,7 @@ export function MainProjectCard() {
                   {clientData && (
                     <Button 
                       variant="outline"
-                      className="border-white/20 text-gray-300 hover:bg-white/10"
+                      className="border-siso-border text-siso-text hover:bg-siso-bg"
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate('/client-dashboard');
@@ -114,28 +114,28 @@ export function MainProjectCard() {
       case 'in_progress':
         return { 
           border: 'border-green-500/20', 
-          bg: 'bg-gradient-to-br from-black/40 to-green-900/10',
-          badgeColor: 'bg-green-500/20 text-green-300 border-green-500/40',
-          icon: 'text-green-400'
+          bg: 'bg-siso-bg-alt',
+          badgeColor: 'bg-siso-orange/20 text-siso-orange border-siso-orange/40',
+          icon: 'text-siso-orange'
         };
       case 'paused':
         return { 
           border: 'border-amber-500/20', 
-          bg: 'bg-gradient-to-br from-black/40 to-amber-900/10',
+          bg: 'bg-siso-bg-alt',
           badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
           icon: 'text-amber-400'
         };
       case 'completed':
         return { 
           border: 'border-blue-500/20', 
-          bg: 'bg-gradient-to-br from-black/40 to-blue-900/10',
-          badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
-          icon: 'text-blue-400'
+          bg: 'bg-siso-bg-alt',
+          badgeColor: 'bg-siso-red/20 text-siso-red border-siso-red/40',
+          icon: 'text-siso-red'
         };
       default:
         return { 
           border: 'border-siso-orange/20', 
-          bg: 'bg-gradient-to-br from-black/40 to-siso-orange/5',
+          bg: 'bg-siso-bg-alt',
           badgeColor: 'bg-siso-orange/20 text-siso-orange border-siso-orange/40',
           icon: 'text-siso-orange'
         };
@@ -158,7 +158,7 @@ export function MainProjectCard() {
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="md:w-1/4 flex-shrink-0 flex justify-center md:justify-start">
-              <div className={`h-24 w-24 rounded-full bg-gradient-to-br from-siso-orange/20 to-siso-red/10 flex items-center justify-center ring-4 ring-siso-orange/20`}>
+              <div className={`h-24 w-24 rounded-full bg-siso-orange/20 flex items-center justify-center ring-4 ring-siso-orange/20`}>
                 <Briefcase size={42} className={statusStyles.icon} />
               </div>
             </div>
@@ -166,7 +166,7 @@ export function MainProjectCard() {
             <div className="md:w-3/4 space-y-4">
               <div className="flex justify-between items-center">
                 <div>
-                  <h2 className="text-2xl font-bold text-white">{project?.name || 'Untitled Project'}</h2>
+                  <h2 className="text-2xl font-bold text-siso-text-bold">{project?.name || 'Untitled Project'}</h2>
                   <p className="text-siso-text-muted text-sm">
                     {project?.description || 'No description available'}
                   </p>
@@ -237,7 +237,7 @@ export function MainProjectCard() {
                   </Button>
                   <Button 
                     size="sm"
-                    className="bg-siso-orange hover:bg-siso-red text-white"
+                    className="bg-siso-orange hover:bg-siso-red"
                   >
                     <span>View Details</span>
                     <ArrowRight className="ml-1 h-4 w-4" />
