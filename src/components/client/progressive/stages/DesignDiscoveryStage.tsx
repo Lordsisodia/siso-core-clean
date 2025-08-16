@@ -326,6 +326,50 @@ export function DesignDiscoveryStage({ onComplete, onNext }: DesignDiscoveryStag
         </Card>
       </div>
 
+      {/* Advanced Mood Board */}
+      <Card className="border-slate-700 bg-gradient-to-r from-purple-900/30 to-pink-900/30">
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Image className="w-5 h-5 text-purple-400" />
+            <span>Advanced Mood Board Discovery</span>
+            <Badge variant="default" className="bg-purple-500 text-white">New</Badge>
+          </CardTitle>
+          <CardDescription>
+            Use our AI-powered mood board to capture your exact design vision
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="bg-slate-800/50 rounded-lg p-4 space-y-3">
+            <div className="flex items-center space-x-2">
+              <Sparkles className="w-5 h-5 text-yellow-400" />
+              <p className="text-sm text-gray-300">
+                Swipe through curated design samples to train our AI on your preferences
+              </p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Target className="w-5 h-5 text-green-400" />
+              <p className="text-sm text-gray-300">
+                Import competitor websites for comparison and inspiration
+              </p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Heart className="w-5 h-5 text-red-400" />
+              <p className="text-sm text-gray-300">
+                Get AI-generated design recommendations tailored to your industry
+              </p>
+            </div>
+          </div>
+          <Button 
+            variant="default"
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+            onClick={() => window.location.href = '/client-dashboard/mood-board'}
+          >
+            <Palette className="mr-2 h-5 w-5" />
+            Launch Interactive Mood Board
+          </Button>
+        </CardContent>
+      </Card>
+
       {/* Brand Direction */}
       <Card className="border-slate-700 bg-slate-800">
         <CardHeader>

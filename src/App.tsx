@@ -71,6 +71,7 @@ import ClientDocumentsPage from "./pages/client/ClientDocumentsPage";
 import ClientTasksPage from "./pages/client/ClientTasksPage";
 import ClientStatusPage from "./pages/client/ClientStatusPage";
 import ClientSupportPage from "./pages/client/ClientSupportPage";
+import MoodBoardPage from "./pages/client/MoodBoardPage";
 import ProjectsAndTasksPage from './pages/ProjectsAndTasksPage';
 import DocumentLibraryPage from './pages/resources/DocumentLibraryPage';
 import ProjectDetailsPage from './pages/ProjectDetailsPage';
@@ -354,6 +355,7 @@ function App() {
           <Route path="/client-dashboard/tasks" element={<AuthGuard><ClientTasksPage /></AuthGuard>} />
           <Route path="/client-dashboard/status" element={<AuthGuard><ClientStatusPage /></AuthGuard>} />
           <Route path="/client-dashboard/support" element={<AuthGuard><ClientSupportPage /></AuthGuard>} />
+          <Route path="/client-dashboard/mood-board" element={<AuthGuard><MoodBoardPage /></AuthGuard>} />
 
           {/* Testing Dashboard Route */}
           <Route path="/testing" element={<AppPlanTestingDashboard />} />
