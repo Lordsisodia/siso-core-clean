@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Clock, FileText, ListTodo, Folder, Sparkles } from "lucide-react";
+import { Clock, FileText, ListTodo, Folder, Sparkles, Palette, Mic } from "lucide-react";
 import { ProgressiveUnlockHub } from "@/components/client/progressive/ProgressiveUnlockHub";
 import { VoiceOnboardingCTA } from "@/components/client/dashboard/VoiceOnboardingCTA";
 import { LiveAgentActivity } from "@/components/client/dashboard/LiveAgentActivity";
@@ -63,14 +63,63 @@ export function ClientDashboardContent() {
   if (useProgressiveUnlock) {
     return (
       <div className="space-y-6">
-        {/* Project Hub Enhancements (Task 09) */}
-        {useProjectHubEnhancements && <VoiceOnboardingCTA />}
-        
         {/* Enhanced Progressive Unlock Experience (Task 13) */}
         <ProgressiveUnlockHub />
         
         {/* Project Hub Quick Actions (Task 09) */}
         {useProjectHubEnhancements && <ProjectHubQuickActions />}
+        
+        {/* Setup & Preferences Section - Optional */}
+        <Card className="border-slate-700 bg-slate-800">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Sparkles className="w-5 h-5 text-yellow-400" />
+              <span>Setup & Preferences</span>
+            </CardTitle>
+            <CardDescription>
+              Optional tools to enhance your project setup
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Voice Onboarding Option */}
+              {useProjectHubEnhancements && !clientData?.voice_onboarding_complete && (
+                <Link to="/client-dashboard/quick-setup?mode=voice">
+                  <Card className="bg-slate-700 border-slate-600 hover:bg-slate-600 transition-colors cursor-pointer h-full">
+                    <CardContent className="p-4">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-10 h-10 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                          <Mic className="w-5 h-5 text-purple-400" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-white mb-1">Voice Setup</h4>
+                          <p className="text-sm text-slate-300">Tell us about your business in a 2-minute voice chat</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )}
+              
+              {/* Mood Board Option */}
+              <Link to="/client-dashboard/mood-board">
+                <Card className="bg-slate-700 border-slate-600 hover:bg-slate-600 transition-colors cursor-pointer h-full">
+                  <CardContent className="p-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
+                        <Palette className="w-5 h-5 text-blue-400" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-white mb-1">Design Preferences</h4>
+                        <p className="text-sm text-slate-300">Create your mood board and design preferences</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
         
         {/* AI Agent Activity (Task 09) */}
         {useProjectHubEnhancements && <LiveAgentActivity />}

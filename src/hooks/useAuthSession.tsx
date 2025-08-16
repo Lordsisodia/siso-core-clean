@@ -115,15 +115,7 @@ export const useAuthSession = () => {
             });
             navigate('/admin', { replace: true });
           } 
-          // Redirect new users to onboarding
-          else if (isNewUser) {
-            toast({
-              title: "Welcome to SISO!",
-              description: "Let's get you set up with your first project."
-            });
-            navigate('/onboarding-chat', { replace: true });
-          }
-          // Redirect existing users to home
+          // For all other users (new and existing), go to home
           else {
             toast({
               title: "Successfully signed in",
