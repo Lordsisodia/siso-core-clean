@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Clock, FileText, ListTodo, Folder } from "lucide-react";
+import { Clock, FileText, ListTodo, Folder, Sparkles } from "lucide-react";
+import { ProgressiveUnlockHub } from "@/components/client/progressive/ProgressiveUnlockHub";
 
 /**
  * Component that shows client dashboard content only if user is a client
@@ -16,6 +17,10 @@ export function ClientDashboardContent() {
   const { clientData, loading: clientDataLoading } = useClientDetails();
   
   const loading = clientCheckLoading || clientDataLoading;
+  
+  // Feature flag for Progressive Unlock System (Task 13)
+  // Enable for new clients or when progressive unlock is explicitly enabled
+  const useProgressiveUnlock = true; // Always enabled for enhanced experience
 
   if (loading) {
     return (
@@ -51,7 +56,87 @@ export function ClientDashboardContent() {
     );
   }
 
-  // Client dashboard content
+  // Client dashboard content - Progressive Unlock System or Legacy
+  if (useProgressiveUnlock) {
+    return (
+      <div className="space-y-6">
+        {/* Enhanced Progressive Unlock Experience */}
+        <ProgressiveUnlockHub />
+        
+        {/* Legacy Quick Access (for familiarity) */}
+        <Card className="border-slate-700 bg-slate-800">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Sparkles className="w-5 h-5 text-yellow-400" />
+              <span>Quick Access</span>
+            </CardTitle>
+            <CardDescription>
+              Direct links to key project areas
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Card className="bg-gradient-to-br from-slate-700 to-slate-800 border-slate-600">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center">
+                    <Folder className="mr-2 h-4 w-4 text-blue-400" />
+                    Projects
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-lg font-bold">{clientData?.project_name || "No project"}</div>
+                  <p className="text-xs text-muted-foreground mt-1">Current project</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-gradient-to-br from-slate-700 to-slate-800 border-slate-600">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center">
+                    <ListTodo className="mr-2 h-4 w-4 text-green-400" />
+                    Tasks
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-lg font-bold">{clientData?.todos?.length || 0}</div>
+                  <p className="text-xs text-muted-foreground mt-1">Outstanding tasks</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-gradient-to-br from-slate-700 to-slate-800 border-slate-600">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center">
+                    <Clock className="mr-2 h-4 w-4 text-purple-400" />
+                    Progress
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-lg font-bold">
+                    {clientData ? `${clientData.current_step}/${clientData.total_steps}` : "0/0"}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">Project milestones</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-gradient-to-br from-slate-700 to-slate-800 border-slate-600">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center">
+                    <FileText className="mr-2 h-4 w-4 text-amber-400" />
+                    Documents
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-lg font-bold">View</div>
+                  <p className="text-xs text-muted-foreground mt-1">Project documentation</p>
+                </CardContent>
+              </Card>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Legacy client dashboard content (fallback)
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
