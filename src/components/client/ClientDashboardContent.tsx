@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Clock, FileText, ListTodo, Folder, Sparkles } from "lucide-react";
 import { ProgressiveUnlockHub } from "@/components/client/progressive/ProgressiveUnlockHub";
+import { VoiceOnboardingCTA } from "@/components/client/dashboard/VoiceOnboardingCTA";
+import { LiveAgentActivity } from "@/components/client/dashboard/LiveAgentActivity";
+import { ProjectHubQuickActions } from "@/components/client/dashboard/ProjectHubQuickActions";
 
 /**
  * Component that shows client dashboard content only if user is a client
@@ -18,9 +21,9 @@ export function ClientDashboardContent() {
   
   const loading = clientCheckLoading || clientDataLoading;
   
-  // Feature flag for Progressive Unlock System (Task 13)
-  // Enable for new clients or when progressive unlock is explicitly enabled
-  const useProgressiveUnlock = true; // Always enabled for enhanced experience
+  // Feature flags for enhanced features
+  const useProgressiveUnlock = true; // Progressive Unlock System (Task 13)
+  const useProjectHubEnhancements = true; // Project Hub Enhancement (Task 09)
 
   if (loading) {
     return (
@@ -56,12 +59,21 @@ export function ClientDashboardContent() {
     );
   }
 
-  // Client dashboard content - Progressive Unlock System or Legacy
+  // Client dashboard content - Enhanced Project Hub Experience
   if (useProgressiveUnlock) {
     return (
       <div className="space-y-6">
-        {/* Enhanced Progressive Unlock Experience */}
+        {/* Project Hub Enhancements (Task 09) */}
+        {useProjectHubEnhancements && <VoiceOnboardingCTA />}
+        
+        {/* Enhanced Progressive Unlock Experience (Task 13) */}
         <ProgressiveUnlockHub />
+        
+        {/* Project Hub Quick Actions (Task 09) */}
+        {useProjectHubEnhancements && <ProjectHubQuickActions />}
+        
+        {/* AI Agent Activity (Task 09) */}
+        {useProjectHubEnhancements && <LiveAgentActivity />}
         
         {/* Legacy Quick Access (for familiarity) */}
         <Card className="border-slate-700 bg-slate-800">
