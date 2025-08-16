@@ -1,6 +1,37 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import Index from './pages/Index';
+import RestaurantLandingPage from './components/landing/RestaurantLandingPage';
+import FitnessLandingPage from './components/landing/FitnessLandingPage';
+import HealthcareLandingPage from './components/landing/HealthcareLandingPage';
+import BarbershopLandingPage from './components/landing/BarbershopLandingPage';
+import AutoRepairLandingPage from './components/landing/AutoRepairLandingPage';
+import RealEstateLandingPage from './components/landing/RealEstateLandingPage';
+import LawFirmLandingPage from './components/landing/LawFirmLandingPage';
+import BeautyLandingPage from './components/landing/BeautyLandingPage';
+import DigitalMarketingLandingPage from './components/landing/DigitalMarketingLandingPage';
+import AccountingLandingPage from './components/landing/AccountingLandingPage';
+import HomeServicesLandingPage from './components/landing/HomeServicesLandingPage';
+import RetailLandingPage from './components/landing/RetailLandingPage';
+import PhotographyLandingPage from './components/landing/PhotographyLandingPage';
+import PetServicesLandingPage from './components/landing/PetServicesLandingPage';
+import ConstructionLandingPage from './components/landing/ConstructionLandingPage';
+import CleaningLandingPage from './components/landing/CleaningLandingPage';
+import ConsultingLandingPage from './components/landing/ConsultingLandingPage';
+import VideoProductionLandingPage from './components/landing/VideoProductionLandingPage';
+import FinancialServicesLandingPage from './components/landing/FinancialServicesLandingPage';
+import EducationLandingPage from './components/landing/EducationLandingPage';
+import TravelLandingPage from './components/landing/TravelLandingPage';
+import FoodServicesLandingPage from './components/landing/FoodServicesLandingPage';
+import TechnologyLandingPage from './components/landing/TechnologyLandingPage';
+import ManufacturingLandingPage from './components/landing/ManufacturingLandingPage';
+import NonprofitLandingPage from './components/landing/NonprofitLandingPage';
+import EventPlanningLandingPage from './components/landing/EventPlanningLandingPage';
+import LogisticsLandingPage from './components/landing/LogisticsLandingPage';
+import EnergyLandingPage from './components/landing/EnergyLandingPage';
+import EcommerceLandingPage from './components/landing/EcommerceLandingPage';
+import ProfessionalServicesLandingPage from './components/landing/ProfessionalServicesLandingPage';
+import AgencyLandingPage from './components/landing/AgencyLandingPage';
 import TestPage from './pages/TestPage';
 import Auth from './pages/Auth';
 import Profile from './pages/Profile';
@@ -130,6 +161,44 @@ function App() {
           
           {/* Public routes */}
           <Route path="/" element={<Index />} />
+          
+          {/* Industry Landing Pages */}
+          <Route path="/restaurant" element={<RestaurantLandingPage />} />
+          <Route path="/fitness" element={<FitnessLandingPage />} />
+          <Route path="/healthcare" element={<HealthcareLandingPage />} />
+          <Route path="/barbershop" element={<BarbershopLandingPage />} />
+          <Route path="/auto-repair" element={<AutoRepairLandingPage />} />
+          <Route path="/real-estate" element={<RealEstateLandingPage />} />
+          <Route path="/law-firm" element={<LawFirmLandingPage />} />
+          <Route path="/beauty" element={<BeautyLandingPage />} />
+          <Route path="/digital-marketing" element={<DigitalMarketingLandingPage />} />
+          <Route path="/accounting" element={<AccountingLandingPage />} />
+          <Route path="/home-services" element={<HomeServicesLandingPage />} />
+          <Route path="/retail" element={<RetailLandingPage />} />
+          <Route path="/photography" element={<PhotographyLandingPage />} />
+          <Route path="/pet-services" element={<PetServicesLandingPage />} />
+          <Route path="/construction" element={<ConstructionLandingPage />} />
+          <Route path="/cleaning" element={<CleaningLandingPage />} />
+          <Route path="/consulting" element={<ConsultingLandingPage />} />
+          <Route path="/video-production" element={<VideoProductionLandingPage />} />
+          
+          {/* New Industry Landing Pages */}
+          <Route path="/financial-services" element={<FinancialServicesLandingPage />} />
+          <Route path="/education" element={<EducationLandingPage />} />
+          <Route path="/travel" element={<TravelLandingPage />} />
+          <Route path="/food-services" element={<FoodServicesLandingPage />} />
+          <Route path="/technology" element={<TechnologyLandingPage />} />
+          <Route path="/manufacturing" element={<ManufacturingLandingPage />} />
+          <Route path="/non-profit" element={<NonprofitLandingPage />} />
+          <Route path="/event-planning" element={<EventPlanningLandingPage />} />
+          <Route path="/logistics" element={<LogisticsLandingPage />} />
+          <Route path="/energy" element={<EnergyLandingPage />} />
+          
+          {/* Task 06: Industry-Specific Landing Pages */}
+          <Route path="/ecommerce" element={<EcommerceLandingPage />} />
+          <Route path="/professional" element={<ProfessionalServicesLandingPage />} />
+          <Route path="/agency" element={<AgencyLandingPage />} />
+          
           <Route path="/auth" element={<Auth />} />
           <Route path="/portfolio" element={<PublicPortfolio />} />
           <Route path="/partnership" element={<PartnershipPage />} />
