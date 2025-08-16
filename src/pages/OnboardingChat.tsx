@@ -15,6 +15,7 @@ import { Progress } from '@/components/ui/progress';
 import { useAuthSession } from '@/hooks/useAuthSession';
 import { saveAppPlan, type AppPlanData, type SavedAppPlan } from '@/services/appPlanService';
 import { saveNewAppPlan, convertGeneratedAppPlanToSaveable, type NewAppPlanData } from '@/services/newAppPlanService';
+import { OnboardingFlow } from '@/components/client/onboarding/OnboardingFlow';
 
 interface Message {
   id: string;
@@ -25,6 +26,9 @@ interface Message {
 }
 
 const OnboardingChat = () => {
+  // Feature flag for enhanced onboarding
+  const useEnhancedOnboarding = true;
+  
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -611,6 +615,53 @@ const OnboardingChat = () => {
     navigate('/');
   };
 
+  // If enhanced onboarding is enabled, use the new flow
+  if (useEnhancedOnboarding) {
+    return (
+      <div className="flex flex-col min-h-screen bg-gradient-to-b from-background via-background/95 to-background">
+        {authLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-background/50 z-50">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          </div>
+        )}
+        
+        {/* Header */}
+        <header className="p-4 border-b flex items-center justify-between backdrop-blur-sm fixed top-0 left-0 right-0 z-10 bg-background/80">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleBack}
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div className="flex items-center space-x-2">
+            <SisoIcon className="h-6 w-6" />
+            <span className="font-semibold">SISO Agency</span>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate('/thankyou')}
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </header>
+        
+        {/* Enhanced Onboarding Flow */}
+        <main className="flex-1 flex items-center justify-center px-4 pt-20 pb-8">
+          <OnboardingFlow 
+            onComplete={(data) => {
+              // Handle completion - save data and navigate
+              console.log('Onboarding complete:', data);
+              navigate('/client-dashboard');
+            }}
+          />
+        </main>
+      </div>
+    );
+  }
+
+  // Original onboarding flow
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-black via-siso-bg to-black">
       {authLoading && (

@@ -16,7 +16,7 @@ export const GettingStartedSection = () => {
   const handleSignUp = async () => {
     setIsLoading(true);
     try {
-      navigate('/auth');
+      navigate('/client-dashboard');
     } catch (error) {
       console.error('Error:', error);
       toast({
@@ -32,7 +32,7 @@ export const GettingStartedSection = () => {
   const handleEmailSignIn = async () => {
     setIsLoading(true);
     try {
-      navigate('/auth');
+      navigate('/client-dashboard');
     } catch (error: any) {
       console.error('Error:', error);
       toast({

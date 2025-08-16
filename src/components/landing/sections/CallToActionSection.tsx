@@ -6,7 +6,7 @@ import { BadgeCheck, ArrowRight, PhoneCall } from 'lucide-react';
 
 export const CallToActionSection = () => {
   const navigate = useNavigate();
-  const handleGetStarted = () => navigate('/auth');
+  const handleGetStarted = () => navigate('/client-dashboard');
 
   return (
     <section className="py-24 px-4 relative overflow-hidden">

@@ -13,8 +13,8 @@ export const HeroSection = memo(() => {
   const isMobile = useIsMobile();
 
   const handleCalloutClick = () => {
-    console.log('Callout clicked - navigating to contact');
-    navigate('/auth');
+    console.log('Callout clicked - navigating to client dashboard');
+    navigate('/client-dashboard');
   };
 
   return (

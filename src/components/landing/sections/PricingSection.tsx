@@ -6,7 +6,7 @@ import { Rocket, Shield, Star, Check, ArrowUp, Award, DollarSign } from 'lucide-
 
 export const PricingSection = () => {
   const navigate = useNavigate();
-  const handleGetStarted = () => navigate('/auth');
+  const handleGetStarted = () => navigate('/client-dashboard');
 
   return (
     <section id="pricing" className="py-20 relative overflow-hidden">
