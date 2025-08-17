@@ -88,7 +88,7 @@ export const SidebarNavigation = ({ collapsed, onItemClick, visible }: Navigatio
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className={cn("px-2 py-4 pb-24", collapsed && "px-1")}
+      className={cn("px-2 py-4", collapsed && "px-1")}
     >
       <div className="space-y-2">
         {menuSections.map((section, index) => (

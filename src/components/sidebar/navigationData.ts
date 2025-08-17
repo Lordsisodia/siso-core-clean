@@ -53,6 +53,7 @@ export const getMenuSections = (): MenuSection[] => {
           label: 'Onboarding',
           badge: progress?.hasCompletedOnboarding ? 'Complete' : 'Start',
           badgeColor: progress?.hasCompletedOnboarding ? 'orange' : 'red',
+          // disabled: false for testing
         },
         {
           href: '/client/mood-board',
@@ -62,7 +63,7 @@ export const getMenuSections = (): MenuSection[] => {
                  progress?.hasCompletedOnboarding ? 'Available' : 'Locked',
           badgeColor: progress?.hasCompletedMoodBoard ? 'orange' : 
                       progress?.hasCompletedOnboarding ? 'red' : 'gray',
-          disabled: !progress?.hasCompletedOnboarding,
+          // disabled: false for testing
         },
         {
           href: '/client/app-plan',
@@ -72,7 +73,7 @@ export const getMenuSections = (): MenuSection[] => {
                  progress?.hasCompletedMoodBoard ? 'Review' : 'Locked',
           badgeColor: progress?.hasAcceptedAppPlan ? 'orange' : 
                       progress?.hasCompletedMoodBoard ? 'red' : 'gray',
-          disabled: !progress?.hasCompletedMoodBoard,
+          // disabled: false for testing
         },
         {
           href: '/client/timeline',
@@ -80,7 +81,7 @@ export const getMenuSections = (): MenuSection[] => {
           label: 'Timeline/PDR',
           badge: progress?.hasAcceptedAppPlan ? 'Active' : 'Locked',
           badgeColor: progress?.hasAcceptedAppPlan ? 'red' : 'gray',
-          disabled: !progress?.hasAcceptedAppPlan,
+          // disabled: false for testing
         },
         {
           href: '/client/agent-teams',
@@ -88,7 +89,7 @@ export const getMenuSections = (): MenuSection[] => {
           label: 'Agent Teams',
           badge: progress?.hasAcceptedAppPlan ? 'Live' : 'Locked',
           badgeColor: progress?.hasAcceptedAppPlan ? 'orange' : 'gray',
-          disabled: !progress?.hasAcceptedAppPlan,
+          // disabled: false for testing
         },
         {
           href: '/client/payments',
@@ -98,7 +99,7 @@ export const getMenuSections = (): MenuSection[] => {
                  progress?.hasAcceptedAppPlan ? 'Setup' : 'Locked',
           badgeColor: progress?.hasSetupPayment ? 'orange' : 
                       progress?.hasAcceptedAppPlan ? 'red' : 'gray',
-          disabled: !progress?.hasAcceptedAppPlan,
+          // disabled: false for testing
         },
         {
           href: '/client/development',
@@ -106,7 +107,7 @@ export const getMenuSections = (): MenuSection[] => {
           label: 'Development',
           badge: progress?.hasStartedDevelopment ? 'In Progress' : 'Locked',
           badgeColor: progress?.hasStartedDevelopment ? 'red' : 'gray',
-          disabled: !progress?.hasViewedTimeline,
+          // disabled: false for testing
         },
         {
           href: '/client/testing',
@@ -116,7 +117,7 @@ export const getMenuSections = (): MenuSection[] => {
                  progress?.hasStartedDevelopment ? 'Active' : 'Locked',
           badgeColor: progress?.hasCompletedTesting ? 'orange' : 
                       progress?.hasStartedDevelopment ? 'red' : 'gray',
-          disabled: !progress?.hasStartedDevelopment,
+          // disabled: false for testing
         },
         {
           href: '/client/launch',
@@ -126,57 +127,8 @@ export const getMenuSections = (): MenuSection[] => {
                  progress?.hasCompletedTesting ? 'Ready' : 'Locked',
           badgeColor: progress?.hasLaunched ? 'orange' : 
                       progress?.hasCompletedTesting ? 'red' : 'gray',
-          disabled: !progress?.hasCompletedTesting,
+          // disabled: false for testing
         },
-      ]
-    },
-    {
-      type: 'section',
-      title: 'Projects & Tasks',
-      icon: ListTodo,
-      items: [
-        {
-          href: '/projects/tasks',
-          icon: ListTodo,
-          label: 'Active Tasks',
-        },
-        {
-          href: '/onboarding-chat',
-          icon: MessageSquare,
-          label: 'SISO Assistant',
-        },
-        {
-          href: '/projects/timeline',
-          icon: CalendarClock,
-          label: 'Timeline',
-        },
-        {
-          href: '/projects/plan-features',
-          icon: ClipboardList,
-          label: 'App Plan',
-        },
-        {
-          href: '/testing',
-          icon: FlaskConical,
-          label: 'AI Testing'
-        }
-      ]
-    },
-    {
-      type: 'section',
-      title: 'Financial',
-      icon: Wallet,
-      items: [
-        {
-          href: '/financial/payments',
-          icon: Wallet,
-          label: 'Financial',
-        },
-        {
-          href: '/economy/leaderboards',
-          icon: Trophy,
-          label: 'Leaderboards',
-        }
       ]
     },
     {

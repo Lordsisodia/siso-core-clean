@@ -187,7 +187,7 @@ export const Sidebar = () => {
         }
         variants={sidebarVariants}
         className={`
-          fixed top-0 h-screen overflow-y-auto
+          fixed top-0 h-screen flex flex-col
           bg-gradient-to-b from-siso-bg to-siso-bg/95 
           border-r border-siso-text/10 shadow-lg
           ${isMobile ? 'left-0 z-40' : ''}
@@ -318,13 +318,15 @@ export const Sidebar = () => {
           </div>
         )}
         
-        <AnimatePresence mode="sync">
-          <SidebarNavigation 
-            collapsed={!isExpanded} 
-            onItemClick={handleItemClick}
-            visible={showNavigation}
-          />
-        </AnimatePresence>
+        <div className="flex-1 overflow-y-auto">
+          <AnimatePresence mode="sync">
+            <SidebarNavigation 
+              collapsed={!isExpanded} 
+              onItemClick={handleItemClick}
+              visible={showNavigation}
+            />
+          </AnimatePresence>
+        </div>
         <SidebarFooter 
           collapsed={!isExpanded} 
           onProfileOpen={(isOpen) => {
