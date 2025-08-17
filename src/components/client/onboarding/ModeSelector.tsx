@@ -12,10 +12,10 @@ export function ModeSelector({ onSelect }: ModeSelectorProps) {
   return (
     <div className="text-center space-y-8">
       <div>
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-siso-red to-siso-orange bg-clip-text text-transparent">
           Let's Get Started
         </h2>
-        <p className="mt-2 text-muted-foreground">
+        <p className="mt-2 text-siso-text-muted">
           Choose how you'd like to share your vision
         </p>
       </div>
@@ -27,19 +27,19 @@ export function ModeSelector({ onSelect }: ModeSelectorProps) {
         >
           <Button
             variant="outline"
-            className="w-full h-auto p-8 flex flex-col items-center space-y-4 border-2 hover:border-primary/50 transition-all"
+            className="w-full h-auto p-8 flex flex-col items-center space-y-4 border-2 border-siso-border hover:border-siso-orange/50 transition-all bg-siso-bg-secondary"
             onClick={() => onSelect('chat')}
           >
             <div className="relative">
-              <MessageSquare className="h-12 w-12 text-primary" />
-              <Sparkles className="h-5 w-5 text-primary absolute -top-1 -right-1 animate-pulse" />
+              <MessageSquare className="h-12 w-12 text-siso-orange" />
+              <Sparkles className="h-5 w-5 text-siso-red absolute -top-1 -right-1 animate-pulse" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-xl font-semibold">💬 Chat</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-xl font-semibold text-siso-text-bold">💬 Chat</h3>
+              <p className="text-sm text-siso-text-muted">
                 Interactive chat with AI assistance
               </p>
-              <div className="flex items-center justify-center space-x-2 text-xs text-muted-foreground">
+              <div className="flex items-center justify-center space-x-2 text-xs text-siso-text-muted">
                 <Clock className="h-3 w-3" />
                 <span>5-10 minutes</span>
               </div>
@@ -67,22 +67,22 @@ export function ModeSelector({ onSelect }: ModeSelectorProps) {
         >
           <Button
             variant="outline"
-            className="w-full h-auto p-8 flex flex-col items-center space-y-4 border-2 hover:border-primary/50 transition-all relative overflow-hidden"
+            className="w-full h-auto p-8 flex flex-col items-center space-y-4 border-2 border-siso-border hover:border-siso-orange/50 transition-all relative overflow-hidden bg-siso-bg-secondary"
             onClick={() => onSelect('voice')}
           >
-            <div className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded-bl-lg font-semibold">
+            <div className="absolute -top-2 -right-2 bg-siso-orange text-white text-xs px-2 py-1 rounded-bl-lg font-semibold">
               FASTEST
             </div>
             <div className="relative">
-              <Phone className="h-12 w-12 text-primary" />
+              <Phone className="h-12 w-12 text-siso-orange" />
               <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-green-500 rounded-full animate-pulse" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-xl font-semibold">📞 Voice Call</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-xl font-semibold text-siso-text-bold">📞 Voice Call</h3>
+              <p className="text-sm text-siso-text-muted">
                 Quick AI-powered conversation
               </p>
-              <div className="flex items-center justify-center space-x-2 text-xs text-muted-foreground">
+              <div className="flex items-center justify-center space-x-2 text-xs text-siso-text-muted">
                 <Clock className="h-3 w-3" />
                 <span>2 minutes</span>
               </div>
@@ -105,7 +105,7 @@ export function ModeSelector({ onSelect }: ModeSelectorProps) {
         </motion.div>
       </div>
 
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-siso-text-muted">
         Don't worry - you can switch methods anytime during onboarding
       </p>
     </div>

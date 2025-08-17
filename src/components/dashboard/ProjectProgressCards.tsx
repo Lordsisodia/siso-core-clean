@@ -1,14 +1,18 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { CheckSquare, Clock, CreditCard } from "lucide-react";
+import { CheckSquare, Clock, CreditCard, Circle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useMainUserProject } from "@/hooks/useUserProjects";
+import { useRealTasks } from "@/hooks/useRealTasks";
+import CountUp from "react-countup";
 
 interface StatCardProps { 
   title: string; 
-  value: string; 
+  value: string | number; 
   icon: React.ReactNode; 
   bgColor: string; 
   textColor: string; 
@@ -17,6 +21,7 @@ interface StatCardProps {
   subtitle?: string;
   linkText?: string;
   linkHref?: string;
+  isLive?: boolean;
 }
 
 function StatCard({ 
@@ -29,43 +34,85 @@ function StatCard({
   progress,
   subtitle,
   linkText,
-  linkHref
+  linkHref,
+  isLive = false
 }: StatCardProps) {
+  const numericValue = typeof value === 'string' 
+    ? parseFloat(value.replace(/[^0-9.-]+/g, ''))
+    : value;
+  const isNumeric = !isNaN(numericValue);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: delay * 0.1 }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+      whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.2 } }}
     >
-      <Card className={`border border-gray-800 ${bgColor} shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden h-full`}>
+      <Card className={`border border-siso-border ${bgColor} shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full relative`}>
+        {/* Live indicator */}
+        {isLive && (
+          <div className="absolute top-3 right-3 flex items-center gap-1 z-10">
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            >
+              <Circle className="h-2 w-2 fill-green-400 text-green-400" />
+            </motion.div>
+            <span className="text-xs text-green-400">Live</span>
+          </div>
+        )}
+
         <div className="p-6 flex flex-col h-full">
           <div className="flex items-center justify-between mb-3">
-            <div>
-              <p className="text-white text-sm font-medium">{title}</p>
-              <p className={`text-2xl font-bold mt-1 ${textColor}`}>{value}</p>
-              {subtitle && <p className="text-xs text-gray-400 mt-1">{subtitle}</p>}
+            <div className="flex-1">
+              <p className="text-siso-text-secondary text-sm font-medium">{title}</p>
+              <p className={`text-2xl font-bold mt-1 ${textColor}`}>
+                {isNumeric ? (
+                  <CountUp
+                    start={0}
+                    end={numericValue}
+                    duration={2}
+                    separator=","
+                    decimals={typeof value === 'string' && value.includes('%') ? 0 : 0}
+                    suffix={typeof value === 'string' && value.includes('%') ? '%' : ''}
+                    prefix={typeof value === 'string' && value.includes('£') ? '£' : ''}
+                  />
+                ) : (
+                  value
+                )}
+              </p>
+              {subtitle && <p className="text-xs text-siso-text-muted mt-1">{subtitle}</p>}
             </div>
-            <div className={`h-12 w-12 rounded-full bg-black/40 flex items-center justify-center ${textColor}`}>
+            <motion.div 
+              className={`h-12 w-12 rounded-full bg-siso-bg-tertiary/40 flex items-center justify-center ${textColor}`}
+              whileHover={{ rotate: 10 }}
+            >
               {icon}
-            </div>
+            </motion.div>
           </div>
           
           {progress !== undefined && (
             <div className="mt-4">
-              <Progress 
-                value={progress} 
-                className="h-1.5 bg-black/30" 
-                indicatorClassName={`${progress >= 70 ? 'bg-green-500' : progress >= 40 ? 'bg-amber-500' : 'bg-[#ea384c]'}`} 
-              />
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: '100%' }}
+                transition={{ duration: 1.5, delay: delay * 0.2 }}
+              >
+                <Progress 
+                  value={progress} 
+                  className="h-1.5 bg-siso-bg-tertiary/30" 
+                  indicatorClassName={`${progress >= 70 ? 'bg-green-500' : progress >= 40 ? 'bg-siso-orange' : 'bg-siso-red'}`} 
+                />
+              </motion.div>
               <div className="flex justify-between mt-1.5">
-                <p className="text-xs text-gray-400">{progress}% Complete</p>
+                <p className="text-xs text-siso-text-muted">{progress}% Complete</p>
                 <Badge 
                   variant="outline" 
                   className={`text-xs py-0 px-1.5 ${
                     progress >= 70 ? 'bg-green-500/10 text-green-400 border-green-500/20' : 
-                    progress >= 40 ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 
-                    'bg-[#ea384c]/10 text-[#ea384c] border-[#ea384c]/20'
+                    progress >= 40 ? 'bg-siso-orange/10 text-siso-orange border-siso-orange/20' : 
+                    'bg-siso-red/10 text-siso-red border-siso-red/20'
                   }`}
                 >
                   {progress >= 70 ? 'On track' : progress >= 40 ? 'In progress' : 'Needs attention'}
@@ -78,7 +125,7 @@ function StatCard({
             <div className="mt-auto pt-4">
               <Button 
                 variant="link" 
-                className="p-0 h-auto text-[#ea384c] hover:text-[#ea384c]/80" 
+                className="p-0 h-auto text-siso-orange hover:text-siso-red transition-colors" 
                 asChild
               >
                 <Link to={linkHref}>{linkText}</Link>
@@ -92,80 +139,111 @@ function StatCard({
 }
 
 export function ProjectProgressCards() {
-  // Using the same data structure as in ProjectStatsCards
-  const stats = {
-    overallProgress: 25,
-    timelineRemaining: {
-      days: 35,
-      endDate: "June 6, 2025",
-      percentComplete: 25
-    },
-    nextMilestone: {
-      name: "Phase 1 Completion",
-      date: "May 21, 2025",
-      tasksCompleted: 3,
-      totalTasks: 6,
-      percentComplete: 50
-    },
-    credits: {
-      spent: 614,
-      tokens: 78592000,
-      cost: 153.50,
-      totalBudget: "£6,000"
-    }
-  };
+  const { project, hasProjects, loading } = useMainUserProject();
+  const { remainingTasks, completedTasks, loading: tasksLoading } = useRealTasks();
+
+  if (loading || tasksLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+        {[...Array(4)].map((_, i) => (
+          <Card key={i} className="border border-siso-border bg-siso-bg-secondary">
+            <div className="p-6 space-y-4">
+              <div className="flex justify-between items-start">
+                <div className="space-y-2 flex-1">
+                  <Skeleton className="h-4 w-24 bg-siso-bg-tertiary" />
+                  <Skeleton className="h-6 w-16 bg-siso-bg-tertiary" />
+                  <Skeleton className="h-3 w-32 bg-siso-bg-tertiary" />
+                </div>
+                <Skeleton className="h-12 w-12 rounded-full bg-siso-bg-tertiary" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-1.5 w-full bg-siso-bg-tertiary" />
+                <div className="flex justify-between">
+                  <Skeleton className="h-3 w-16 bg-siso-bg-tertiary" />
+                  <Skeleton className="h-4 w-20 bg-siso-bg-tertiary" />
+                </div>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  if (!hasProjects) {
+    return null; // Don't show progress cards if no projects
+  }
+
+  // Calculate real metrics
+  const totalTasks = (remainingTasks || 0) + (completedTasks || 0);
+  const overallProgress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  
+  // Calculate project timeline (mock calculation based on completion)
+  const projectStartDate = project?.created_at ? new Date(project.created_at) : new Date();
+  const estimatedDuration = 45; // 45 days estimated project duration
+  const daysElapsed = Math.floor((Date.now() - projectStartDate.getTime()) / (1000 * 60 * 60 * 24));
+  const daysRemaining = Math.max(0, estimatedDuration - daysElapsed);
+  const endDate = new Date(Date.now() + (daysRemaining * 24 * 60 * 60 * 1000));
+  
+  // Calculate budget info
+  const projectBudget = project?.budget || 5000;
+  const spentPercentage = Math.min(overallProgress * 0.8, 100); // Assume 80% correlation
+  const spentAmount = (projectBudget * spentPercentage) / 100;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
       <StatCard 
         title="Overall Progress"
-        value="25%"
-        subtitle="1.5 weeks out of 6"
-        icon={<CheckSquare className="h-6 w-6 text-[#ea384c]" />}
-        bgColor="bg-black/40"
-        textColor="text-[#ea384c]"
+        value={`${overallProgress}%`}
+        subtitle={`${completedTasks || 0} of ${totalTasks} tasks completed`}
+        icon={<CheckSquare className="h-6 w-6 text-siso-orange" />}
+        bgColor="bg-siso-bg-secondary"
+        textColor="text-siso-orange"
         delay={0}
-        progress={stats.overallProgress}
+        progress={overallProgress}
+        isLive={true}
         linkText="View Timeline"
         linkHref="/projects/timeline"
       />
       
       <StatCard 
         title="Timeline Remaining"
-        value={`${stats.timelineRemaining.days} days`}
-        subtitle={`until ${stats.timelineRemaining.endDate}`}
-        icon={<Clock className="h-6 w-6 text-red-400" />}
-        bgColor="bg-black/40"
-        textColor="text-red-400"
+        value={`${daysRemaining} days`}
+        subtitle={`until ${endDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+        icon={<Clock className="h-6 w-6 text-blue-400" />}
+        bgColor="bg-siso-bg-secondary"
+        textColor="text-blue-400"
         delay={1}
-        progress={stats.timelineRemaining.percentComplete}
+        progress={Math.max(0, ((estimatedDuration - daysRemaining) / estimatedDuration) * 100)}
         linkText="View Timeline"
         linkHref="/projects/timeline"
       />
       
       <StatCard 
         title="Next Milestone"
-        value={stats.nextMilestone.name}
-        subtitle={`${stats.nextMilestone.date} (${stats.nextMilestone.tasksCompleted}/${stats.nextMilestone.totalTasks} tasks)`}
-        icon={<CheckSquare className="h-6 w-6 text-[#ea384c]" />}
-        bgColor="bg-black/40"
-        textColor="text-[#ea384c]"
+        value="Phase Completion"
+        subtitle={`${remainingTasks || 0} tasks remaining to complete current phase`}
+        icon={<CheckSquare className="h-6 w-6 text-green-400" />}
+        bgColor="bg-siso-bg-secondary"
+        textColor="text-green-400"
         delay={2}
-        progress={stats.nextMilestone.percentComplete}
+        progress={overallProgress}
+        isLive={remainingTasks > 0}
         linkText="View Tasks"
-        linkHref="/projects/ubahcrypt/active-tasks"
+        linkHref="/tasks"
       />
       
       <StatCard 
-        title="Credits Spent"
-        value={`£${stats.credits.cost}`}
-        subtitle={`${stats.credits.spent} credits (${(stats.credits.tokens/1000000).toFixed(1)}M tokens)`}
-        icon={<CreditCard className="h-6 w-6 text-red-400" />}
-        bgColor="bg-black/40"
-        textColor="text-red-400"
+        title="Budget Utilization"
+        value={`£${Math.round(spentAmount)}`}
+        subtitle={`${Math.round(spentPercentage)}% of £${projectBudget.toLocaleString()} budget used`}
+        icon={<CreditCard className="h-6 w-6 text-purple-400" />}
+        bgColor="bg-siso-bg-secondary"
+        textColor="text-purple-400"
         delay={3}
+        progress={spentPercentage}
         linkText="View Financial Details"
-        linkHref="/projects/ubahcrypt/financial"
+        linkHref="/financials"
       />
     </div>
   );

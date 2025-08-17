@@ -1,9 +1,13 @@
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
-import { FolderOpen, CheckSquare, Rocket, Calendar, TrendingUp, TrendingDown, Clock, Target } from 'lucide-react';
+import { FolderOpen, CheckSquare, Rocket, Calendar, TrendingUp, TrendingDown, Clock, Target, Circle } from 'lucide-react';
 import { useMainUserProject } from '@/hooks/useUserProjects';
+import { useRealTasks } from '@/hooks/useRealTasks';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
+import CountUp from 'react-countup';
+import { LineChart, Line, ResponsiveContainer } from 'recharts';
 
 interface StatCardData {
   id: string;
@@ -25,6 +29,9 @@ interface StatCardData {
     total: number;
     percentage: number;
   };
+  isLive?: boolean;
+  clickPath?: string;
+  miniChartData?: { value: number }[];
 }
 
 // Utility functions to calculate real user progress
@@ -98,6 +105,19 @@ const getTimelineEstimate = (hasProjects: boolean) => {
 
 const StatCard = ({ data, index }: { data: StatCardData; index: number }) => {
   const IconComponent = data.icon;
+  const navigate = useNavigate();
+
+  // Extract numeric value for CountUp
+  const numericValue = typeof data.value === 'string' 
+    ? parseFloat(data.value.replace(/[^0-9.-]+/g, ''))
+    : data.value;
+  const isNumeric = !isNaN(numericValue);
+
+  const handleClick = () => {
+    if (data.clickPath) {
+      navigate(data.clickPath);
+    }
+  };
   
   return (
     <motion.div
@@ -105,13 +125,32 @@ const StatCard = ({ data, index }: { data: StatCardData; index: number }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="group"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
     >
-      <Card className={cn(
-        "relative overflow-hidden border-0 bg-gradient-to-br transition-all duration-300 hover:scale-[1.02] hover:shadow-xl",
-        data.gradient
-      )}>
+      <Card 
+        className={cn(
+          "relative overflow-hidden border-0 bg-gradient-to-br transition-all duration-300 hover:shadow-xl cursor-pointer",
+          data.gradient,
+          data.clickPath && "hover:shadow-2xl"
+        )}
+        onClick={handleClick}
+      >
         {/* Subtle pattern overlay */}
         <div className="absolute inset-0 bg-black/10 opacity-50" />
+        
+        {/* Live indicator */}
+        {data.isLive && (
+          <div className="absolute top-3 right-3 flex items-center gap-1 z-10">
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            >
+              <Circle className="h-2 w-2 fill-green-400 text-green-400" />
+            </motion.div>
+            <span className="text-xs text-green-400">Live</span>
+          </div>
+        )}
         
         {/* Glow effect on hover */}
         <div className={cn(
@@ -123,15 +162,28 @@ const StatCard = ({ data, index }: { data: StatCardData; index: number }) => {
           <div className="flex items-start justify-between">
             <div className="space-y-3 flex-1">
               <div className="flex items-center gap-3">
-                <div className={cn(
-                  "p-3 rounded-xl shadow-lg",
-                  data.iconBg
-                )}>
+                <motion.div 
+                  className={cn("p-3 rounded-xl shadow-lg", data.iconBg)}
+                  whileHover={{ rotate: 10 }}
+                >
                   <IconComponent className={cn("h-6 w-6", data.textColor)} />
-                </div>
+                </motion.div>
                 <div>
                   <p className="text-sm font-medium text-white/70">{data.title}</p>
-                  <p className="text-2xl font-bold text-white">{data.value}</p>
+                  <p className="text-2xl font-bold text-white">
+                    {isNumeric ? (
+                      <CountUp
+                        start={0}
+                        end={numericValue}
+                        duration={2}
+                        separator=","
+                        decimals={typeof data.value === 'string' && data.value.includes('%') ? 0 : 0}
+                        suffix={typeof data.value === 'string' && data.value.includes('%') ? '%' : ''}
+                      />
+                    ) : (
+                      data.value
+                    )}
+                  </p>
                 </div>
               </div>
               
@@ -157,16 +209,31 @@ const StatCard = ({ data, index }: { data: StatCardData; index: number }) => {
               </div>
             </div>
             
-            {/* Decorative element */}
+            {/* Mini Chart or Decorative element */}
             <div className="relative">
-              <div className={cn(
-                "w-20 h-20 rounded-full opacity-10",
-                data.iconBg
-              )} />
-              <IconComponent className={cn(
-                "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-8 w-8 opacity-20",
-                data.textColor
-              )} />
+              {data.miniChartData && data.miniChartData.length > 0 ? (
+                <div className="w-20 h-12 opacity-60 group-hover:opacity-100 transition-opacity">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={data.miniChartData}>
+                      <Line 
+                        type="monotone" 
+                        dataKey="value" 
+                        stroke={data.textColor.replace('text-', '#')}
+                        strokeWidth={2}
+                        dot={false}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <div>
+                  <div className={cn("w-20 h-20 rounded-full opacity-10", data.iconBg)} />
+                  <IconComponent className={cn(
+                    "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-8 w-8 opacity-20",
+                    data.textColor
+                  )} />
+                </div>
+              )}
             </div>
           </div>
           
@@ -178,15 +245,17 @@ const StatCard = ({ data, index }: { data: StatCardData; index: number }) => {
                 <span>{data.progress.current}/{data.progress.total}</span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2">
-                <div 
+                <motion.div 
                   className={cn(
-                    "h-2 rounded-full transition-all duration-500",
+                    "h-2 rounded-full",
                     data.id === 'setup' && "bg-gradient-to-r from-blue-500 to-cyan-500",
                     data.id === 'tasks' && "bg-gradient-to-r from-orange-500 to-amber-500",
                     data.id === 'project' && "bg-gradient-to-r from-green-500 to-emerald-500",
                     data.id === 'timeline' && "bg-gradient-to-r from-purple-500 to-pink-500"
                   )}
-                  style={{ width: `${data.progress.percentage}%` }}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${data.progress.percentage}%` }}
+                  transition={{ duration: 1.5, delay: index * 0.2 }}
                 />
               </div>
             </div>
@@ -199,12 +268,15 @@ const StatCard = ({ data, index }: { data: StatCardData; index: number }) => {
 
 export function StatCards() {
   const { project, hasProjects, loading } = useMainUserProject();
+  const { remainingTasks, completedTasks, loading: tasksLoading } = useRealTasks();
   
   // Calculate real user metrics
   const onboardingProgress = getOnboardingProgress();
-  const activeTasks = getActiveTasksCount();
+  const activeTasks = remainingTasks || getActiveTasksCount();
   const projectPhase = getProjectPhase(hasProjects);
   const timelineEstimate = getTimelineEstimate(hasProjects);
+  const totalTasks = (remainingTasks || 0) + (completedTasks || 0);
+  const taskCompletionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   const statsData: StatCardData[] = [
     {
@@ -222,6 +294,11 @@ export function StatCards() {
       iconBg: 'bg-blue-500/20 border border-blue-400/30',
       textColor: 'text-blue-400',
       borderColor: 'border-blue-500/20',
+      clickPath: '/onboarding',
+      miniChartData: [
+        { value: 20 }, { value: 40 }, { value: 60 }, 
+        { value: 80 }, { value: onboardingProgress }
+      ],
       progress: {
         current: Math.floor(onboardingProgress / 10),
         total: 10,
@@ -230,27 +307,29 @@ export function StatCards() {
     },
     {
       id: 'tasks',
-      title: 'Active Tasks',
-      value: activeTasks,
-      subtitle: activeTasks === 0 ? 'all complete!' : 'tasks remaining',
+      title: 'Task Completion',
+      value: `${taskCompletionRate}%`,
+      subtitle: `${completedTasks || 0} of ${totalTasks} completed`,
       icon: CheckSquare,
-      trend: activeTasks > 0 ? {
-        value: Math.max(0, 100 - (activeTasks * 11)),
+      isLive: true,
+      trend: taskCompletionRate > 0 ? {
+        value: taskCompletionRate,
         isPositive: true,
         period: 'progress'
-      } : {
-        value: 100,
-        isPositive: true,
-        period: 'complete'
-      },
+      } : undefined,
       gradient: 'from-orange-600/20 via-orange-500/10 to-amber-500/20',
       iconBg: 'bg-orange-500/20 border border-orange-400/30',
       textColor: 'text-orange-400',
       borderColor: 'border-orange-500/20',
+      clickPath: '/tasks',
+      miniChartData: [
+        { value: 40 }, { value: 55 }, { value: 70 }, 
+        { value: 85 }, { value: taskCompletionRate }
+      ],
       progress: {
-        current: Math.max(0, 9 - activeTasks),
-        total: 9,
-        percentage: Math.max(0, ((9 - activeTasks) / 9) * 100)
+        current: completedTasks || 0,
+        total: totalTasks,
+        percentage: taskCompletionRate
       }
     },
     {
@@ -259,6 +338,7 @@ export function StatCards() {
       value: projectPhase,
       subtitle: hasProjects ? 'development active' : 'current phase',
       icon: hasProjects ? FolderOpen : Target,
+      isLive: hasProjects,
       trend: hasProjects ? {
         value: 65,
         isPositive: true,
@@ -271,7 +351,8 @@ export function StatCards() {
       gradient: 'from-green-600/20 via-green-500/10 to-emerald-500/20',
       iconBg: 'bg-green-500/20 border border-green-400/30',
       textColor: 'text-green-400',
-      borderColor: 'border-green-500/20'
+      borderColor: 'border-green-500/20',
+      clickPath: hasProjects ? '/projects' : '/create-project'
     },
     {
       id: 'timeline',
@@ -291,7 +372,8 @@ export function StatCards() {
       gradient: 'from-purple-600/20 via-purple-500/10 to-pink-500/20',
       iconBg: 'bg-purple-500/20 border border-purple-400/30',
       textColor: 'text-purple-400',
-      borderColor: 'border-purple-500/20'
+      borderColor: 'border-purple-500/20',
+      clickPath: '/timeline'
     }
   ];
 

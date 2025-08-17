@@ -21,6 +21,7 @@ import {
   Users,
   Award
 } from 'lucide-react';
+import { Logo } from '@/components/Logo';
 
 // Define types for plan data
 interface PlanData {
@@ -291,10 +292,10 @@ export default function PublicPlanView() {
           {/* Premium Navigation Bar */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center space-x-4">
-              <img 
-                src="/lovable-uploads/c5921a2f-8856-42f4-bec5-2d08b81c5691.png" 
-                alt="SISO Agency" 
-                className="h-12 w-12 rounded-xl border border-siso-orange/60 shadow-lg bg-black/40"
+              <Logo 
+                variant="main" 
+                size="md"
+                className="rounded-xl border border-siso-orange/60 shadow-lg bg-black/40"
               />
               <div>
                 <h3 className="text-xl font-bold text-siso-text-bold">SISO Agency</h3>
@@ -460,10 +461,10 @@ export default function PublicPlanView() {
             {/* Enhanced Company Info */}
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <img 
-                  src="/lovable-uploads/c5921a2f-8856-42f4-bec5-2d08b81c5691.png" 
-                  alt="SISO Agency" 
-                  className="h-10 w-10 rounded-xl border border-siso-orange/60 shadow-lg bg-black/40"
+                <Logo 
+                  variant="main" 
+                  size="sm"
+                  className="rounded-xl border border-siso-orange/60 shadow-lg bg-black/40"
                 />
                 <div>
                   <h3 className="text-lg font-bold text-siso-text-bold">SISO Agency</h3>

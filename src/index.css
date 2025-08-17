@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap') layer(fonts);
 @import './components/ui/animations.css';
+@import './styles/color-system.css';
+@import './styles/scrollbar-fix.css';
+@import './styles/timeline-scrollbar.css';
+@import './styles/contrast-fixes.css';
 
 @tailwind base;
 @tailwind components;
@@ -152,7 +156,7 @@
 }
 
 .nav-link {
-  @apply relative px-4 py-2.5 text-siso-text hover:text-siso-text-bold transition-colors duration-300;
+  @apply relative px-4 py-2.5 text-siso-text-secondary hover:text-siso-text-primary transition-colors duration-300;
 }
 
 .nav-link::after {
@@ -164,9 +168,13 @@
 }
 
 .glow-card {
-  @apply relative overflow-hidden rounded-lg bg-gradient-to-br from-siso-red/5 to-siso-orange/5 
-    hover:from-siso-red/10 hover:to-siso-orange/10 border border-siso-border hover:border-siso-border-hover
+  @apply relative overflow-hidden rounded-lg bg-gradient-to-br border border-siso-border hover:border-siso-border-hover
     p-6 transition-all duration-300 backdrop-blur-sm;
+  background: linear-gradient(to bottom right, rgba(255, 87, 34, 0.05), rgba(255, 167, 38, 0.05));
+}
+
+.glow-card:hover {
+  background: linear-gradient(to bottom right, rgba(255, 87, 34, 0.1), rgba(255, 167, 38, 0.1));
 }
 
 .title-glow {

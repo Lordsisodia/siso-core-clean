@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SidebarLogo from './sidebar/SidebarLogo';
 import { SidebarNavigation } from './sidebar/SidebarNavigation';
 import { SidebarFooter } from './sidebar/SidebarFooter';
 import { Menu, X, FolderOpen, ChevronDown, User, LogOut } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from './ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
 import { useSelectedProject } from '@/hooks/useSelectedProject';
 import { CollapsedProjectCard } from '@/components/client/CollapsedProjectCard';
 import {
@@ -26,11 +26,25 @@ export const Sidebar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [wasManuallyExpanded, setWasManuallyExpanded] = useState(false);
   const [isProjectMenuOpen, setIsProjectMenuOpen] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const ignoreMouseLeaveUntil = useRef<number>(0);
   const projectMenuButtonRef = useRef<HTMLButtonElement>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const isMobile = useIsMobile();
   const { selectedProject, projects, selectProject } = useSelectedProject();
+
+  // Check for reduced motion preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReducedMotion(mediaQuery.matches);
+    
+    const handleChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -66,16 +80,61 @@ export const Sidebar = () => {
     }
   };
 
+  // Close mobile menu on route change and handle escape key
   useEffect(() => {
     if (isMobile) {
       setIsMobileMenuOpen(false);
     }
-  }, [location.pathname]);
+  }, [location.pathname, isMobile]);
 
+  // Keyboard navigation support
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    // Escape key closes mobile menu
+    if (e.key === 'Escape' && isMobile && isMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+      return;
+    }
+
+    // Alt+S toggles sidebar (desktop only)
+    if (e.altKey && e.key === 's' && !isMobile) {
+      e.preventDefault();
+      setIsExpanded(!isExpanded);
+      setWasManuallyExpanded(true);
+      ignoreMouseLeaveUntil.current = Date.now() + 2000;
+      return;
+    }
+
+    // Focus trap for mobile menu
+    if (isMobileMenuOpen && isMobile && e.key === 'Tab') {
+      const focusableElements = sidebarRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      
+      if (focusableElements && focusableElements.length > 0) {
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+        
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    }
+  }, [isMobile, isMobileMenuOpen, isExpanded]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
+  // Optimized animation variants with reduced motion support
   const sidebarVariants = {
     expanded: {
       width: isMobile ? "16rem" : "16rem",
-      transition: {
+      transition: reducedMotion ? { duration: 0 } : {
         type: "spring",
         stiffness: 200,
         damping: 25,
@@ -84,13 +143,19 @@ export const Sidebar = () => {
     },
     collapsed: {
       width: isMobile ? "0" : "4rem",
-      transition: {
+      transition: reducedMotion ? { duration: 0 } : {
         type: "spring",
         stiffness: 300,
         damping: 35,
         mass: 0.8
       }
     }
+  };
+
+  // Improved mobile menu button animation
+  const mobileButtonVariants = {
+    open: { rotate: 180, scale: 1 },
+    closed: { rotate: 0, scale: 1 }
   };
 
   const handleMouseEnter = () => {
@@ -144,8 +209,8 @@ export const Sidebar = () => {
   };
 
   return (
-    <>
-      {/* Mobile Menu Button with smooth icon transition */}
+    <MotionConfig reducedMotion={reducedMotion ? "always" : "never"}>
+      {/* Mobile Menu Button with improved accessibility */}
       {isMobile && (
         <motion.div
           initial={false}
@@ -155,21 +220,24 @@ export const Sidebar = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="fixed top-4 right-4 z-50 bg-siso-bg/80 backdrop-blur-sm"
+            className="fixed top-4 right-4 z-50 bg-siso-bg/80 backdrop-blur-sm focus:ring-2 focus:ring-siso-orange focus:ring-offset-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-sidebar"
           >
             <AnimatePresence initial={false} mode="sync">
               <motion.div
                 key={isMobileMenuOpen ? 'close' : 'menu'}
-                initial={{ opacity: 0, rotate: -90 }}
+                initial={reducedMotion ? {} : { opacity: 0, rotate: -90 }}
                 animate={{ opacity: 1, rotate: 0 }}
-                exit={{ opacity: 0, rotate: 90 }}
-                transition={{ duration: 0.2 }}
+                exit={reducedMotion ? {} : { opacity: 0, rotate: 90 }}
+                transition={{ duration: reducedMotion ? 0 : 0.2 }}
               >
                 {isMobileMenuOpen ? (
-                  <X className="h-6 w-6 text-siso-text" />
+                  <X className="h-6 w-6 text-siso-text" aria-hidden="true" />
                 ) : (
-                  <Menu className="h-6 w-6 text-siso-text" />
+                  <Menu className="h-6 w-6 text-siso-text" aria-hidden="true" />
                 )}
               </motion.div>
             </AnimatePresence>
@@ -177,8 +245,9 @@ export const Sidebar = () => {
         </motion.div>
       )}
 
-      {/* Sidebar with improved animations */}
-      <motion.div 
+      {/* Enhanced Sidebar with accessibility and performance improvements */}
+      <motion.nav 
+        ref={sidebarRef}
         initial={false}
         animate={
           isMobile 
@@ -191,9 +260,14 @@ export const Sidebar = () => {
           bg-gradient-to-b from-siso-bg to-siso-bg/95 
           border-r border-siso-text/10 shadow-lg
           ${isMobile ? 'left-0 z-40' : ''}
+          focus-within:z-50
         `}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        role="navigation"
+        aria-label="Main navigation"
+        id={isMobile ? "mobile-sidebar" : "desktop-sidebar"}
+        aria-hidden={isMobile ? !isMobileMenuOpen : false}
       >
         <SidebarLogo 
           collapsed={!isExpanded} 
@@ -338,34 +412,42 @@ export const Sidebar = () => {
             }
           }}
         />
-      </motion.div>
+      </motion.nav>
 
-      {/* Main Content Wrapper with smooth margin transition */}
+      {/* Main Content Wrapper with optimized transitions */}
       <motion.div 
         className="min-h-screen"
         animate={{
           marginLeft: !isMobile ? (isExpanded ? '16rem' : '4rem') : 0
         }}
-        transition={{
+        transition={reducedMotion ? { duration: 0 } : {
           type: "spring",
           stiffness: 200,
           damping: 25
         }}
       >
-        {/* Mobile Overlay with improved backdrop blur */}
+        {/* Enhanced Mobile Overlay with improved accessibility */}
         <AnimatePresence>
           {isMobile && isMobileMenuOpen && (
             <motion.div 
-              initial={{ opacity: 0 }}
+              initial={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              exit={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: reducedMotion ? 0 : 0.2 }}
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30"
               onClick={() => setIsMobileMenuOpen(false)}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  setIsMobileMenuOpen(false);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label="Close navigation menu"
             />
           )}
         </AnimatePresence>
       </motion.div>
-    </>
+    </MotionConfig>
   );
 };

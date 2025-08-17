@@ -52,6 +52,7 @@ import HowToEarn from './pages/HowToEarn';
 import LeaderboardPage from './pages/LeaderboardPage';
 import { AuthGuard } from './components/auth/AuthGuard';
 import MyProjects from './pages/MyProjects';
+import Projects from './pages/Projects';
 import AdminPlans from './pages/AdminPlans';
 import AdminOutreach from './pages/AdminOutreach';
 import AdminTemplates from './pages/AdminTemplates';
@@ -310,7 +311,7 @@ function App() {
           <Route path="/home" element={<EnhancedDashboard />} />
           
           {/* Protected Project Routes */}
-          <Route path="/projects" element={<AuthGuard><ProjectsAndTasksPage /></AuthGuard>} />
+          <Route path="/projects" element={<AuthGuard><Projects /></AuthGuard>} />
           <Route path="/projects/tasks" element={<AuthGuard><ProjectsAndTasksPage /></AuthGuard>} />
           <Route path="/projects/timeline" element={<AuthGuard><TimelinePage /></AuthGuard>} />
           <Route path="/projects/plan-features" element={<AuthGuard><ProjectDetailsPage /></AuthGuard>} />

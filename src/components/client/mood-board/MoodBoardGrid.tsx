@@ -180,7 +180,7 @@ export function MoodBoardGrid() {
                             checked={isSelected}
                             onCheckedChange={() => handleImageClick(image.id)}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-white/90"
+                            className="bg-black/90 border-siso-orange"
                           />
                         </div>
                       )}
@@ -292,7 +292,7 @@ export function MoodBoardGrid() {
                               {image.colors.slice(0, 3).map((color, idx) => (
                                 <div
                                   key={idx}
-                                  className="h-4 w-4 rounded-full border-2 border-white"
+                                  className="h-4 w-4 rounded-full border-2 border-black"
                                   style={{ backgroundColor: color }}
                                 />
                               ))}

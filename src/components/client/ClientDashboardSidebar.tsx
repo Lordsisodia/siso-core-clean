@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { useSelectedProject } from "@/hooks/useSelectedProject";
 import { useClientData } from "@/hooks/useClientData";
 import { useAuthSession } from "@/hooks/useAuthSession";
+import { Logo } from "@/components/Logo";
 
 export function ClientDashboardSidebar() {
   const navigate = useNavigate();
@@ -91,12 +92,12 @@ export function ClientDashboardSidebar() {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-4 flex items-center justify-center border-b border-siso-border">
-            <img
-              src="/lovable-uploads/c5921a2f-8856-42f4-bec5-2d08b81c5691.png"
-              alt="SISO Agency"
-              className="h-10 w-10 rounded-xl border border-siso-orange/60 shadow-lg bg-black/40"
+            <Logo 
+              variant="simple" 
+              size="sm"
+              showText={true}
+              className="hover:scale-105 transition-transform"
             />
-            <span className="ml-3 text-siso-text-bold text-lg font-bold">SISO Agency</span>
           </div>
           
           {/* Enhanced Project Selection Dropdown */}

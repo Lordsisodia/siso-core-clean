@@ -19,13 +19,13 @@ export function PartnershipLayout({
   const isMobile = useIsMobile();
 
   return (
-    <div className="flex min-h-screen bg-black">
+    <div className="flex h-screen bg-black">
       {/* Partnership Sidebar */}
       <PartnershipSidebar />
       
       {/* Main Content Area */}
       <motion.main 
-        className="flex-1 overflow-y-auto"
+        className="flex-1 main-scroll-container"
         animate={{
           marginLeft: !isMobile ? '4rem' : 0
         }}

@@ -40,7 +40,7 @@ export function OnboardingFlow({ onComplete, onSkip }: OnboardingFlowProps) {
 
   return (
     <OnboardingProvider>
-      <Card className="w-full max-w-4xl mx-auto p-6 bg-background/95 backdrop-blur">
+      <Card className="w-full max-w-4xl mx-auto p-6 bg-siso-bg/95 backdrop-blur border-siso-border">
         <AnimatePresence mode="wait">
           {!mode ? (
             <motion.div

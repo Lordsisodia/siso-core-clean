@@ -11,6 +11,9 @@ import { ProgressiveUnlockHub } from "@/components/client/progressive/Progressiv
 import { VoiceOnboardingCTA } from "@/components/client/dashboard/VoiceOnboardingCTA";
 import { LiveAgentActivity } from "@/components/client/dashboard/LiveAgentActivity";
 import { ProjectHubQuickActions } from "@/components/client/dashboard/ProjectHubQuickActions";
+import { ClientMetricsOverview } from "@/components/client/dashboard/ClientMetricsOverview";
+import { UpcomingMilestones } from "@/components/client/dashboard/UpcomingMilestones";
+import { QuickStats } from "@/components/client/dashboard/QuickStats";
 
 /**
  * Component that shows client dashboard content only if user is a client
@@ -69,6 +72,35 @@ export function ClientDashboardContent() {
         {/* Project Hub Quick Actions (Task 09) */}
         {useProjectHubEnhancements && <ProjectHubQuickActions />}
         
+        {/* Quick Stats Grid */}
+        {useProjectHubEnhancements && (
+          <Card className="border-slate-700 bg-slate-800">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Sparkles className="w-5 h-5 text-yellow-400" />
+                <span>Project Statistics</span>
+              </CardTitle>
+              <CardDescription>
+                Key metrics and performance indicators
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <QuickStats />
+            </CardContent>
+          </Card>
+        )}
+        
+        {/* Client Metrics Overview */}
+        {useProjectHubEnhancements && <ClientMetricsOverview />}
+        
+        {/* Upcoming milestones - now full width since activity feed is in sidebar */}
+        {useProjectHubEnhancements && (
+          <UpcomingMilestones />
+        )}
+        
+        {/* AI Agent Activity (Task 09) */}
+        {useProjectHubEnhancements && <LiveAgentActivity />}
+        
         {/* Setup & Preferences Section - Optional */}
         <Card className="border-slate-700 bg-slate-800">
           <CardHeader>
@@ -117,79 +149,6 @@ export function ClientDashboardContent() {
                   </CardContent>
                 </Card>
               </Link>
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* AI Agent Activity (Task 09) */}
-        {useProjectHubEnhancements && <LiveAgentActivity />}
-        
-        {/* Legacy Quick Access (for familiarity) */}
-        <Card className="border-slate-700 bg-slate-800">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Sparkles className="w-5 h-5 text-yellow-400" />
-              <span>Quick Access</span>
-            </CardTitle>
-            <CardDescription>
-              Direct links to key project areas
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Card className="bg-gradient-to-br from-slate-700 to-slate-800 border-slate-600">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base flex items-center">
-                    <Folder className="mr-2 h-4 w-4 text-blue-400" />
-                    Projects
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-lg font-bold">{clientData?.project_name || "No project"}</div>
-                  <p className="text-xs text-muted-foreground mt-1">Current project</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-gradient-to-br from-slate-700 to-slate-800 border-slate-600">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base flex items-center">
-                    <ListTodo className="mr-2 h-4 w-4 text-green-400" />
-                    Tasks
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-lg font-bold">{clientData?.todos?.length || 0}</div>
-                  <p className="text-xs text-muted-foreground mt-1">Outstanding tasks</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-gradient-to-br from-slate-700 to-slate-800 border-slate-600">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base flex items-center">
-                    <Clock className="mr-2 h-4 w-4 text-purple-400" />
-                    Progress
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-lg font-bold">
-                    {clientData ? `${clientData.current_step}/${clientData.total_steps}` : "0/0"}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1">Project milestones</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-gradient-to-br from-slate-700 to-slate-800 border-slate-600">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base flex items-center">
-                    <FileText className="mr-2 h-4 w-4 text-amber-400" />
-                    Documents
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-lg font-bold">View</div>
-                  <p className="text-xs text-muted-foreground mt-1">Project documentation</p>
-                </CardContent>
-              </Card>
             </div>
           </CardContent>
         </Card>

@@ -22,19 +22,37 @@ export function MainProjectCard() {
         transition={{ duration: 0.4, delay: 0.2 }}
         className="mb-6"
       >
-        <Card className="border border-siso-border bg-siso-bg-alt">
+        <Card className="border border-siso-border bg-siso-bg-secondary">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-6">
               <div className="md:w-1/4 flex-shrink-0 flex justify-center md:justify-start">
-                <Skeleton className="h-24 w-24 rounded-full" />
+                <div className="h-24 w-24 rounded-full bg-siso-bg-tertiary animate-pulse" />
               </div>
               <div className="md:w-3/4 space-y-4">
-                <Skeleton className="h-6 w-48" />
-                <Skeleton className="h-4 w-32" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-48 bg-siso-bg-tertiary" />
+                  <Skeleton className="h-4 w-32 bg-siso-bg-tertiary" />
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Skeleton className="h-8 w-full" />
-                  <Skeleton className="h-8 w-full" />
-                  <Skeleton className="h-8 w-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-20 bg-siso-bg-tertiary" />
+                    <Skeleton className="h-2 w-full bg-siso-bg-tertiary" />
+                  </div>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-20 bg-siso-bg-tertiary" />
+                    <Skeleton className="h-2 w-full bg-siso-bg-tertiary" />
+                  </div>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-20 bg-siso-bg-tertiary" />
+                    <Skeleton className="h-2 w-full bg-siso-bg-tertiary" />
+                  </div>
+                </div>
+                <div className="flex justify-between items-center pt-3">
+                  <Skeleton className="h-4 w-32 bg-siso-bg-tertiary" />
+                  <div className="flex gap-2">
+                    <Skeleton className="h-8 w-20 bg-siso-bg-tertiary" />
+                    <Skeleton className="h-8 w-24 bg-siso-bg-tertiary" />
+                  </div>
                 </div>
               </div>
             </div>

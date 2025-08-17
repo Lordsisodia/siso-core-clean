@@ -5,8 +5,16 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useNavigate } from 'react-router-dom';
 import { useClientDetails } from '@/hooks/client/useClientDetails';
+import { motion } from 'framer-motion';
 import { 
   Zap, 
   Clock, 
@@ -25,15 +33,27 @@ export function ProjectHubQuickActions() {
   const currentStep = clientData?.current_step || 0;
   const totalSteps = clientData?.total_steps || 46;
 
+  // Define action interface
+  interface QuickAction {
+    id: string;
+    label: string;
+    icon: React.ElementType;
+    path: string;
+    priority: 'high' | 'medium' | 'low';
+    description: string;
+    badge?: string;
+  }
+
   // Determine which actions to show based on project progress
-  const quickActions = [
+  const quickActions: QuickAction[] = [
     {
       id: 'continue-setup',
       label: 'Continue Setup',
       icon: Zap,
       path: '/client-dashboard/quick-setup',
       priority: currentStep < 10 ? 'high' : 'low',
-      description: 'Complete your project setup'
+      description: 'Complete your project setup',
+      badge: currentStep < 10 ? `${10 - currentStep} steps` : undefined
     },
     {
       id: 'view-tasks',
@@ -41,7 +61,8 @@ export function ProjectHubQuickActions() {
       icon: Clock,
       path: '/client-dashboard/work-in-progress',
       priority: currentStep >= 5 ? 'high' : 'medium',
-      description: 'See current development tasks'
+      description: 'See current development tasks',
+      badge: '8 active'
     },
     {
       id: 'project-timeline',
@@ -128,58 +149,80 @@ export function ProjectHubQuickActions() {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {sortedActions.map((action) => {
-          const IconComponent = action.icon;
-          
-          return (
-            <Button
-              key={action.id}
-              variant={getButtonVariant(action.priority)}
-              className={getButtonClasses(action.priority)}
-              onClick={() => handleActionClick(action.path)}
-            >
-              <div className="flex items-start space-x-3 w-full">
-                <div className={`
-                  flex items-center justify-center w-10 h-10 rounded-lg 
-                  ${action.priority === 'high' 
-                    ? 'bg-white/20 text-white' 
-                    : action.priority === 'medium'
-                    ? 'bg-blue-500/20 text-blue-400'
-                    : 'bg-slate-700 text-gray-400'
-                  }
-                `}>
-                  <IconComponent className="w-5 h-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className={`
-                    font-medium text-sm 
-                    ${action.priority === 'high' 
-                      ? 'text-white' 
-                      : action.priority === 'medium'
-                      ? 'text-white'
-                      : 'text-gray-300'
-                    }
-                  `}>
-                    {action.label}
-                  </div>
-                  <div className={`
-                    text-xs mt-1 
-                    ${action.priority === 'high' 
-                      ? 'text-white/80' 
-                      : action.priority === 'medium'
-                      ? 'text-gray-400'
-                      : 'text-gray-500'
-                    }
-                  `}>
-                    {action.description}
-                  </div>
-                </div>
-              </div>
-            </Button>
-          );
-        })}
-      </div>
+      <TooltipProvider>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {sortedActions.map((action, index) => {
+            const IconComponent = action.icon;
+            
+            return (
+              <motion.div
+                key={action.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={getButtonVariant(action.priority)}
+                      className={getButtonClasses(action.priority)}
+                      onClick={() => handleActionClick(action.path)}
+                    >
+                      <div className="flex items-start space-x-3 w-full">
+                        <div className={`
+                          flex items-center justify-center w-10 h-10 rounded-lg 
+                          ${action.priority === 'high' 
+                            ? 'bg-white/20 text-white' 
+                            : action.priority === 'medium'
+                            ? 'bg-blue-500/20 text-blue-400'
+                            : 'bg-slate-700 text-gray-400'
+                          }
+                        `}>
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className={`
+                            font-medium text-sm flex items-center space-x-2
+                            ${action.priority === 'high' 
+                              ? 'text-white' 
+                              : action.priority === 'medium'
+                              ? 'text-white'
+                              : 'text-gray-300'
+                            }
+                          `}>
+                            <span>{action.label}</span>
+                            {action.badge && (
+                              <Badge variant="secondary" className="text-xs">
+                                {action.badge}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className={`
+                            text-xs mt-1 
+                            ${action.priority === 'high' 
+                              ? 'text-white/80' 
+                              : action.priority === 'medium'
+                              ? 'text-gray-400'
+                              : 'text-gray-500'
+                            }
+                          `}>
+                            {action.description}
+                          </div>
+                        </div>
+                      </div>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{action.description}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </motion.div>
+            );
+          })}
+        </div>
+      </TooltipProvider>
 
       {/* Progress Indicator */}
       <div className="mt-6 p-4 bg-slate-800/50 rounded-lg border border-slate-700">

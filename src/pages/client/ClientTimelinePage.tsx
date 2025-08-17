@@ -4,11 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { ArrowLeft, Map, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Map, CheckCircle, Clock, AlertCircle, Filter } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthSession } from '@/hooks/useAuthSession';
 import { motion } from 'framer-motion';
+import { EnhancedTimelineStep } from '@/components/client/timeline/EnhancedTimelineStep';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // 46 PDR Steps as per specification
 const pdrSteps = [
@@ -64,6 +65,8 @@ export default function ClientTimelinePage() {
   const navigate = useNavigate();
   const { user } = useAuthSession();
   const [completedSteps, setCompletedSteps] = useState(4);
+  const [expandedStep, setExpandedStep] = useState<number | null>(null);
+  const [phaseFilter, setPhaseFilter] = useState<string>('all');
   const progressPercentage = (completedSteps / 46) * 100;
 
   useEffect(() => {
@@ -101,6 +104,11 @@ export default function ClientTimelinePage() {
 
   // Group steps by category
   const categories = [...new Set(pdrSteps.map(step => step.category))];
+  
+  // Filter steps based on phase
+  const filteredSteps = phaseFilter === 'all' 
+    ? pdrSteps 
+    : pdrSteps.filter(step => step.category.toLowerCase() === phaseFilter);
 
   return (
     <DashboardLayout>
@@ -143,44 +151,61 @@ export default function ClientTimelinePage() {
             </CardContent>
           </Card>
 
+          {/* Filter Controls */}
+          <div className="mb-4 flex items-center gap-4">
+            <Select value={phaseFilter} onValueChange={setPhaseFilter}>
+              <SelectTrigger className="w-48 bg-siso-bg-alt border-siso-border">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Filter by phase" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Phases</SelectItem>
+                <SelectItem value="discovery">Discovery</SelectItem>
+                <SelectItem value="planning">Planning</SelectItem>
+                <SelectItem value="design">Design</SelectItem>
+                <SelectItem value="development">Development</SelectItem>
+                <SelectItem value="ai integration">AI Integration</SelectItem>
+                <SelectItem value="testing">Testing</SelectItem>
+                <SelectItem value="deployment">Deployment</SelectItem>
+                <SelectItem value="launch">Launch</SelectItem>
+                <SelectItem value="post-launch">Post-Launch</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Timeline Overview */}
             <div className="lg:col-span-2">
               <Card className="bg-siso-bg-alt border-siso-border">
                 <CardHeader>
-                  <CardTitle className="text-lg text-siso-text-bold">PDR Steps Timeline</CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg text-siso-text-bold">PDR Steps Timeline</CardTitle>
+                    <span className="text-sm text-siso-text-muted">
+                      Showing {filteredSteps.length} of {pdrSteps.length} steps
+                    </span>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <ScrollArea className="h-[600px] pr-4">
-                    {categories.map((category, categoryIndex) => (
-                      <div key={category} className="mb-6">
-                        <h3 className="text-sm font-semibold text-siso-text-bold mb-3 sticky top-0 bg-siso-bg-alt py-2">
-                          {category}
-                        </h3>
-                        <div className="space-y-2">
-                          {pdrSteps
-                            .filter(step => step.category === category)
-                            .map((step, index) => (
-                              <motion.div
-                                key={step.id}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: index * 0.05 }}
-                                className={`
-                                  flex items-center gap-3 p-3 rounded-lg bg-siso-bg
-                                  ${step.status === 'in-progress' ? 'ring-2 ring-siso-red/40' : ''}
-                                `}
-                              >
-                                {getStatusIcon(step.status)}
-                                <span className={`text-sm ${getStatusColor(step.status)}`}>
-                                  {step.id}. {step.name}
-                                </span>
-                              </motion.div>
-                            ))}
-                        </div>
-                      </div>
+                  <div className="max-h-[700px] overflow-y-auto pr-4 space-y-4 timeline-scroll">
+                    {filteredSteps.map((step, index) => (
+                      <EnhancedTimelineStep
+                        key={step.id}
+                        step={{
+                          id: step.id,
+                          title: step.name,
+                          phase: step.category.toLowerCase(),
+                          status: step.status as 'not-started' | 'in-progress' | 'completed' | 'blocked',
+                          description: `${step.category} phase - ${step.name}`,
+                          estimatedHours: 4,
+                          deliverables: [`${step.name} completion report`, 'Documentation'],
+                          requiresApproval: step.id % 5 === 0
+                        }}
+                        isActive={step.status === 'in-progress'}
+                        isExpanded={expandedStep === step.id}
+                        onExpand={() => setExpandedStep(expandedStep === step.id ? null : step.id)}
+                      />
                     ))}
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
             </div>

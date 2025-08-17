@@ -3,6 +3,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Logo } from "../Logo";
 
 const logoVariants = cva("transition-all", {
   variants: {
@@ -99,14 +100,13 @@ export function PartnershipSidebarLogo({
           !expanded && "justify-center w-full"
         )}
       >
-        <img 
-          src="/lovable-uploads/c5921a2f-8856-42f4-bec5-2d08b81c5691.png" 
-          alt="SISO AGENCY" 
-          className={cn(
-            "w-9 h-9",
-            !expanded && "mx-auto"
-          )} 
-        />
+        <div className={cn(!expanded && "mx-auto")}>
+          <Logo 
+            variant="simple" 
+            size="sm"
+            showText={false}
+          />
+        </div>
         {expanded && (
           <motion.span
             initial={{ opacity: 0, width: 0 }}

@@ -9,6 +9,7 @@ import {
   FileText as Documents,
   CalendarClock,
   MessageSquare,
+  Users,
 } from "lucide-react";
 
 export const clientMenuSections = [
@@ -32,6 +33,11 @@ export const clientMenuSections = [
         href: '/onboarding-chat',
         icon: MessageSquare,
         label: 'SISO Assistant',
+      },
+      {
+        href: '/client/agent-teams',
+        icon: Users,
+        label: 'Agent Teams',
       },
       {
         href: '/client-dashboard/timeline',

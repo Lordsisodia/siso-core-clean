@@ -7,7 +7,11 @@ import { usePortfolioData } from '@/hooks/usePortfolioData';
 import { adaptPortfolioToLeaderboard } from '@/components/portfolio/PortfolioLeaderboardAdapter';
 import { PortfolioLeaderboardTable } from '@/components/portfolio/PortfolioLeaderboardTable';
 import { ProjectDetailsModal } from '@/components/portfolio/ProjectDetailsModal';
+import { PortfolioStats } from '@/components/portfolio/PortfolioStats';
+import { PortfolioGrid } from '@/components/portfolio/PortfolioGrid';
 import CountUp from 'react-countup';
+import { Logo } from '@/components/Logo';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function PublicPortfolio() {
   const { items, loading } = usePortfolioData();
@@ -87,10 +91,10 @@ export default function PublicPortfolio() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <img 
-                src="/lovable-uploads/c5921a2f-8856-42f4-bec5-2d08b81c5691.png" 
-                alt="SISO Agency" 
-                className="w-20 h-20 mx-auto mb-8"
+              <Logo 
+                variant="main" 
+                size="lg"
+                className="mx-auto mb-8"
               />
               
               <h1 className="text-6xl md:text-7xl font-bold text-white mb-4">
@@ -193,36 +197,106 @@ export default function PublicPortfolio() {
             </motion.div>
           </div>
 
-          {/* Enhanced Professional Leaderboard */}
+          {/* Portfolio Stats */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
+            className="mb-16"
+          >
+            <PortfolioStats portfolioData={items} />
+          </motion.div>
+
+          {/* Portfolio Tabs */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
             className="mb-20"
           >
-            <Card className="border border-gray-800 bg-black">
-              <CardHeader className="border-b border-gray-800 py-8">
-                <CardTitle className="text-center">
-                  <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="w-1 h-8 bg-siso-orange"></div>
-                    <h2 className="text-3xl font-bold text-white">Client Project Portfolio</h2>
-                    <div className="w-1 h-8 bg-siso-orange"></div>
-                  </div>
-                  <p className="text-lg text-gray-300 mb-2">
-                    Live applications and platforms we've built and operate
-                  </p>
-                  <p className="text-sm text-gray-400 font-normal">
-                    Ranked by complexity, scale, and business impact • {totalProjects} active projects
-                  </p>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <PortfolioLeaderboardTable 
-                  projectData={portfolioEntries as any} 
-                  onProjectClick={handleProjectClick}
-                />
-              </CardContent>
-            </Card>
+            <Tabs defaultValue="grid" className="w-full">
+              <div className="flex items-center justify-center mb-8">
+                <TabsList className="bg-siso-bg-alt border border-siso-border">
+                  <TabsTrigger 
+                    value="grid" 
+                    className="data-[state=active]:bg-siso-orange data-[state=active]:text-white"
+                  >
+                    Portfolio Gallery
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="table" 
+                    className="data-[state=active]:bg-siso-orange data-[state=active]:text-white"
+                  >
+                    Project Rankings
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              <TabsContent value="grid" className="space-y-6">
+                <Card className="border border-gray-800 bg-black">
+                  <CardHeader className="border-b border-gray-800 py-6">
+                    <CardTitle className="text-center">
+                      <div className="flex items-center justify-center gap-3 mb-3">
+                        <div className="w-1 h-6 bg-siso-orange"></div>
+                        <h2 className="text-2xl font-bold text-white">Interactive Portfolio</h2>
+                        <div className="w-1 h-6 bg-siso-orange"></div>
+                      </div>
+                      <p className="text-md text-gray-300 mb-2">
+                        Explore our projects with detailed views and interactive galleries
+                      </p>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <PortfolioGrid 
+                      projects={items.map(item => ({
+                        id: item.id,
+                        app_name: item.title || item.app_name,
+                        client_name: item.client_name,
+                        description: item.description || '',
+                        technologies: item.technologies || [],
+                        images: item.images || ['/placeholder-project.jpg'],
+                        live_url: item.live_url,
+                        case_study_url: item.case_study_url,
+                        development_status: item.development_status || 'completed',
+                        estimated_value: item.estimated_value || 50000,
+                        completion_date: item.completion_date,
+                        duration_months: item.duration_months || 3,
+                        key_features: item.key_features || ['Feature 1', 'Feature 2', 'Feature 3'],
+                        testimonial: item.testimonial,
+                        rating: item.rating || 5
+                      }))}
+                      onProjectSelect={handleProjectClick}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="table">
+                <Card className="border border-gray-800 bg-black">
+                  <CardHeader className="border-b border-gray-800 py-6">
+                    <CardTitle className="text-center">
+                      <div className="flex items-center justify-center gap-3 mb-3">
+                        <div className="w-1 h-6 bg-siso-orange"></div>
+                        <h2 className="text-2xl font-bold text-white">Project Rankings</h2>
+                        <div className="w-1 h-6 bg-siso-orange"></div>
+                      </div>
+                      <p className="text-md text-gray-300 mb-2">
+                        Projects ranked by complexity, scale, and business impact
+                      </p>
+                      <p className="text-sm text-gray-400 font-normal">
+                        {totalProjects} active projects in our portfolio
+                      </p>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <PortfolioLeaderboardTable 
+                      projectData={portfolioEntries as any} 
+                      onProjectClick={handleProjectClick}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </motion.div>
 
           {/* Enhanced Glowing CTA */}

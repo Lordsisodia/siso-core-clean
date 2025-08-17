@@ -47,14 +47,14 @@ export function ProgressTracker({ mode, onBack }: ProgressTrackerProps) {
             variant="ghost"
             size="sm"
             onClick={onBack}
-            className="hover:bg-primary/10"
+            className="hover:bg-siso-orange/10 text-siso-text"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
         )}
         
-        <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+        <div className="flex items-center space-x-4 text-sm text-siso-text-muted">
           <div className="flex items-center space-x-1">
             <Clock className="h-4 w-4" />
             <span>Est. time: {formatTime(timeRemaining)}</span>
@@ -70,15 +70,15 @@ export function ProgressTracker({ mode, onBack }: ProgressTrackerProps) {
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">
+          <h3 className="text-lg font-semibold text-siso-text-bold">
             Step {currentStepIndex + 1} of {steps.length}: {steps[currentStepIndex]?.label}
           </h3>
-          <span className="text-sm font-medium">{Math.round(progressPercentage)}%</span>
+          <span className="text-sm font-medium text-siso-text">{Math.round(progressPercentage)}%</span>
         </div>
         
-        <Progress value={progressPercentage} className="h-2" />
+        <Progress value={progressPercentage} className="h-2 bg-siso-bg-tertiary" />
         
-        <div className="bg-muted/50 rounded-lg p-4">
+        <div className="bg-siso-bg-secondary/50 rounded-lg p-4 border border-siso-border">
           <div className="grid grid-cols-5 gap-2">
             {steps.map((step, index) => {
               const isCompleted = completedSteps.includes(step.id);
@@ -92,7 +92,7 @@ export function ProgressTracker({ mode, onBack }: ProgressTrackerProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className={`flex flex-col items-center space-y-2 p-2 rounded-lg transition-all ${
-                    isCurrent ? 'bg-primary/10 ring-2 ring-primary/50' : ''
+                    isCurrent ? 'bg-siso-orange/10 ring-2 ring-siso-orange/50' : ''
                   }`}
                 >
                   <div className="relative">
@@ -103,17 +103,17 @@ export function ProgressTracker({ mode, onBack }: ProgressTrackerProps) {
                         animate={{ scale: [1, 1.1, 1] }}
                         transition={{ repeat: Infinity, duration: 2 }}
                       >
-                        <Circle className="h-6 w-6 text-primary fill-primary/20" />
+                        <Circle className="h-6 w-6 text-siso-orange fill-siso-orange/20" />
                       </motion.div>
                     ) : (
-                      <Circle className="h-6 w-6 text-muted-foreground/50" />
+                      <Circle className="h-6 w-6 text-siso-text-muted/50" />
                     )}
                     <span className="text-lg absolute -top-2 -right-2">{step.icon}</span>
                   </div>
                   <span className={`text-xs text-center ${
                     isCompleted ? 'text-green-600 font-medium' :
-                    isCurrent ? 'text-primary font-medium' :
-                    'text-muted-foreground'
+                    isCurrent ? 'text-siso-orange font-medium' :
+                    'text-siso-text-muted'
                   }`}>
                     {step.label}
                   </span>
@@ -123,7 +123,7 @@ export function ProgressTracker({ mode, onBack }: ProgressTrackerProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="flex items-center justify-between text-xs text-siso-text-muted">
           <span>Auto-saved {getTimeSinceAutoSave()}</span>
           <span className="flex items-center space-x-1">
             <div className="h-2 w-2 bg-green-500 rounded-full" />

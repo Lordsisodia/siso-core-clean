@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Twitter, Linkedin, Instagram, Youtube, Mail, MapPin } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Logo } from './Logo';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -13,10 +14,10 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-4 flex flex-col items-center text-center">
         {/* Logo only - bigger and centered */}
         <div className="flex flex-col items-center space-y-3 md:space-y-4 mb-8 md:mb-10">
-          <img 
-            src="/lovable-uploads/c5921a2f-8856-42f4-bec5-2d08b81c5691.png" 
-            alt="SISO Logo" 
-            className={`${isMobile ? 'w-16 h-16' : 'w-20 h-20'}`}
+          <Logo 
+            variant="main" 
+            size={isMobile ? 'lg' : 'xl'}
+            className="transition-transform hover:scale-105"
           />
           <p className="text-sm sm:text-base text-siso-text-muted max-w-md px-4">
             Your one-stop AI knowledge source for agencies looking to scale with the latest technology

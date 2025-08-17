@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Link } from "react-router-dom";
+import { Logo } from "../Logo";
 
 const logoVariants = cva("transition-all", {
   variants: {
@@ -82,21 +83,12 @@ export function SidebarLogo({
         transition={{ duration: 0.5 }}
         className="flex items-center"
       >
-        <img 
-          src="/lovable-uploads/c5921a2f-8856-42f4-bec5-2d08b81c5691.png" 
-          alt="SISO AGENCY" 
-          className="w-8 h-8 dark:invert-0" 
+        <Logo 
+          variant="simple" 
+          size="sm"
+          showText={expanded}
+          className={expanded ? "" : "hover:scale-110"}
         />
-        {expanded && (
-          <motion.span
-            initial={{ opacity: 0, width: 0 }}
-            animate={{ opacity: 1, width: "auto" }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className="ml-2.5 text-xl font-bold bg-gradient-to-r from-siso-red to-siso-orange text-transparent bg-clip-text"
-          >
-            SISO
-          </motion.span>
-        )}
       </motion.div>
     </div>
   );

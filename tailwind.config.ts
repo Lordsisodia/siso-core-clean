@@ -27,15 +27,38 @@ export default {
       },
       colors: {
         siso: {
-          bg: "#121212",
-          "bg-alt": "#1A1A1A",
-          red: "#FF5722",
-          orange: "#FFA726",
-          text: "#E0E0E0",
-          "text-bold": "#FFFFFF",
-          "text-muted": "#9E9E9E",
-          border: "#2A2A2A",
-          "border-hover": "#3A3A3A", // Added the missing border-hover color
+          // Core colors
+          black: "var(--siso-black)",
+          orange: "rgb(var(--siso-orange-rgb) / <alpha-value>)",
+          red: "rgb(var(--siso-red-rgb) / <alpha-value>)",
+          
+          // Backgrounds
+          "bg-primary": "var(--siso-bg-primary)",
+          "bg-secondary": "var(--siso-bg-secondary)", 
+          "bg-tertiary": "var(--siso-bg-tertiary)",
+          "bg-alt": "var(--siso-bg-secondary)", // Alias for bg-secondary
+          bg: "var(--siso-bg-secondary)", // Legacy alias
+          "bg-hover": "var(--siso-bg-hover)",
+          "bg-active": "var(--siso-bg-active)",
+          
+          // Text
+          "text-primary": "var(--siso-text-primary)",
+          "text-secondary": "var(--siso-text-secondary)",
+          "text-muted": "var(--siso-text-muted)",
+          "text-disabled": "var(--siso-text-disabled)",
+          "text-bold": "var(--siso-text-primary)", // Alias for text-primary
+          text: "var(--siso-text-secondary)", // Legacy alias
+          
+          // Borders  
+          border: "var(--siso-border-primary)",
+          "border-hover": "var(--siso-border-secondary)",
+          "border-active": "var(--siso-border-active)",
+          
+          // Status
+          success: "var(--siso-success)",
+          warning: "var(--siso-warning)",
+          error: "var(--siso-error)",
+          info: "var(--siso-info)",
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

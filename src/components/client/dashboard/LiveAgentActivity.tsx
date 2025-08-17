@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { useClientDetails } from '@/hooks/client/useClientDetails';
+import { useDashboardData } from '@/hooks/client/useDashboardData';
 import { 
   Bot, 
   Activity, 
@@ -37,64 +38,20 @@ interface AgentActivity {
 
 export function LiveAgentActivity() {
   const { clientData } = useClientDetails();
-  const [agentActivities, setAgentActivities] = useState<AgentActivity[]>([]);
+  const { dashboardData, loading, refresh } = useDashboardData();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  // Use real data from Supabase
+  const agentActivities = dashboardData?.agentActivities || [];
 
-  // Mock data - in production, this would come from Supabase real-time subscription
-  const mockAgentActivities: AgentActivity[] = [
-    {
-      id: '1',
-      agentName: 'DevBot Alpha',
-      agentType: 'development',
-      currentTask: 'Implementing Progressive Unlock System components',
-      status: 'active',
-      progress: 85,
-      tokensUsed: 1247,
-      estimatedCompletion: '15 min',
-      lastUpdate: '2 min ago'
-    },
-    {
-      id: '2',
-      agentName: 'DesignCraft AI',
-      agentType: 'design',
-      currentTask: 'Optimizing responsive layout for mobile devices',
-      status: 'active',
-      progress: 62,
-      tokensUsed: 823,
-      estimatedCompletion: '8 min',
-      lastUpdate: '1 min ago'
-    },
-    {
-      id: '3',
-      agentName: 'TestMaster Pro',
-      agentType: 'testing',
-      currentTask: 'Running quality assurance checks',
-      status: 'completed',
-      progress: 100,
-      tokensUsed: 156,
-      lastUpdate: '5 min ago'
-    }
-  ];
-
+  // Auto-refresh every 30 seconds
   useEffect(() => {
-    // Initialize with mock data
-    setAgentActivities(mockAgentActivities);
+    const intervalId = setInterval(() => {
+      handleRefresh();
+    }, 30000);
 
-    // In production, set up Supabase real-time subscription
-    /*
-    const subscription = supabase
-      .channel('agent_activity')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'agent_activities',
-        filter: `client_id=eq.${clientData?.id}`
-      }, handleAgentUpdate)
-      .subscribe();
-
-    return () => subscription.unsubscribe();
-    */
-  }, [clientData?.id]);
+    return () => clearInterval(intervalId);
+  }, []);
 
   const totalTokensUsed = agentActivities.reduce((sum, agent) => sum + agent.tokensUsed, 0);
   const totalTokenLimit = 5000; // Example limit
@@ -125,17 +82,7 @@ export function LiveAgentActivity() {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Update mock data with slight changes
-    setAgentActivities(prev => prev.map(agent => ({
-      ...agent,
-      progress: agent.status === 'active' ? Math.min(100, agent.progress + Math.random() * 10) : agent.progress,
-      tokensUsed: agent.status === 'active' ? agent.tokensUsed + Math.floor(Math.random() * 50) : agent.tokensUsed,
-      lastUpdate: agent.status === 'active' ? 'Just now' : agent.lastUpdate
-    })));
-    
+    await refresh();
     setIsRefreshing(false);
   };
 

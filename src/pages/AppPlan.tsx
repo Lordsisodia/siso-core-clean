@@ -439,8 +439,8 @@ export default function AppPlan() {
 
                           <div className="space-y-4">
                             {/* Industry Analysis */}
-                            <details className="group bg-gray-900/50 rounded-lg border border-gray-700">
-                              <summary className="p-4 cursor-pointer hover:bg-gray-800/50 transition-colors">
+                            <div className="group bg-gray-900/50 rounded-lg border border-gray-700">
+                              <div className="p-4 cursor-pointer hover:bg-gray-800/50 transition-colors">
                                 <div className="flex items-center gap-3">
                                   <div className="bg-purple-500 rounded-full p-1">
                                     <Search className="h-4 w-4 text-white" />
@@ -448,7 +448,7 @@ export default function AppPlan() {
                                   <span className="text-white font-medium">Industry Analysis</span>
                                   <span className="text-gray-400 text-sm ml-auto">Click to expand</span>
                                 </div>
-                              </summary>
+                              </div>
                               <div className="p-4 pt-0 space-y-2">
                                 {savedPlan.research_results?.industryAnalysis ? (
                                   savedPlan.research_results.industryAnalysis.map((item, index) => (
@@ -463,11 +463,11 @@ export default function AppPlan() {
                                   </>
                                 )}
                               </div>
-                            </details>
+                            </div>
 
                             {/* Technical Recommendations */}
-                            <details className="group bg-gray-900/50 rounded-lg border border-gray-700">
-                              <summary className="p-4 cursor-pointer hover:bg-gray-800/50 transition-colors">
+                            <div className="group bg-gray-900/50 rounded-lg border border-gray-700">
+                              <div className="p-4 cursor-pointer hover:bg-gray-800/50 transition-colors">
                                 <div className="flex items-center gap-3">
                                   <div className="bg-blue-500 rounded-full p-1">
                                     <FileText className="h-4 w-4 text-white" />
@@ -475,7 +475,7 @@ export default function AppPlan() {
                                   <span className="text-white font-medium">Technical Recommendations</span>
                                   <span className="text-gray-400 text-sm ml-auto">Click to expand</span>
                                 </div>
-                              </summary>
+                              </div>
                               <div className="p-4 pt-0 space-y-2">
                                 {savedPlan.research_results?.techRecommendations ? (
                                   savedPlan.research_results.techRecommendations.map((item, index) => (
@@ -490,11 +490,11 @@ export default function AppPlan() {
                                   </>
                                 )}
                               </div>
-                            </details>
+                            </div>
 
                             {/* Market Opportunities */}
-                            <details className="group bg-gray-900/50 rounded-lg border border-gray-700">
-                              <summary className="p-4 cursor-pointer hover:bg-gray-800/50 transition-colors">
+                            <div className="group bg-gray-900/50 rounded-lg border border-gray-700">
+                              <div className="p-4 cursor-pointer hover:bg-gray-800/50 transition-colors">
                                 <div className="flex items-center gap-3">
                                   <div className="bg-green-500 rounded-full p-1">
                                     <BarChart3 className="h-4 w-4 text-white" />
@@ -502,7 +502,7 @@ export default function AppPlan() {
                                   <span className="text-white font-medium">Market Opportunities</span>
                                   <span className="text-gray-400 text-sm ml-auto">Click to expand</span>
                                 </div>
-                              </summary>
+                              </div>
                               <div className="p-4 pt-0 space-y-2">
                                 {savedPlan.research_results?.marketOpportunities ? (
                                   savedPlan.research_results.marketOpportunities.map((item, index) => (
@@ -517,11 +517,11 @@ export default function AppPlan() {
                                   </>
                                 )}
                               </div>
-                            </details>
+                            </div>
 
                             {/* Company Analysis */}
-                            <details className="group bg-gray-900/50 rounded-lg border border-gray-700">
-                              <summary className="p-4 cursor-pointer hover:bg-gray-800/50 transition-colors">
+                            <div className="group bg-gray-900/50 rounded-lg border border-gray-700">
+                              <div className="p-4 cursor-pointer hover:bg-gray-800/50 transition-colors">
                                 <div className="flex items-center gap-3">
                                   <div className="bg-orange-500 rounded-full p-1">
                                     <ExternalLink className="h-4 w-4 text-white" />
@@ -529,7 +529,7 @@ export default function AppPlan() {
                                   <span className="text-white font-medium">{savedPlan.company_name} Specific Analysis</span>
                                   <span className="text-gray-400 text-sm ml-auto">Click to expand</span>
                                 </div>
-                              </summary>
+                              </div>
                               <div className="p-4 pt-0 space-y-2">
                                 {savedPlan.research_results?.companyAnalysis ? (
                                   savedPlan.research_results.companyAnalysis.map((item, index) => (
@@ -544,7 +544,7 @@ export default function AppPlan() {
                                   </>
                                 )}
                               </div>
-                            </details>
+                            </div>
                           </div>
                         </div>
                       </div>

@@ -173,7 +173,7 @@ export function MoodBoardSwiper() {
               }}
             >
               <div className="flex items-center justify-center h-full">
-                <div className="bg-white/90 rounded-full p-4">
+                <div className="bg-black/90 rounded-full p-4">
                   <Heart className="h-12 w-12 text-green-600 fill-green-600" />
                 </div>
               </div>
@@ -189,7 +189,7 @@ export function MoodBoardSwiper() {
               }}
             >
               <div className="flex items-center justify-center h-full">
-                <div className="bg-white/90 rounded-full p-4">
+                <div className="bg-black/90 rounded-full p-4">
                   <X className="h-12 w-12 text-red-600" />
                 </div>
               </div>

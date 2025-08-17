@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Users, Award } from 'lucide-react';
+import { Logo } from '@/components/Logo';
 
 const authSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -177,11 +178,13 @@ export default function Auth() {
             )}
             
             <div>
-              <img
-                src="/lovable-uploads/c5921a2f-8856-42f4-bec5-2d08b81c5691.png"
-                alt="SISO Agency"
-                className="h-16 w-16 mx-auto rounded-xl border border-siso-orange/60 shadow-lg bg-black/40 mb-4"
-              />
+              <div className="mx-auto mb-4 flex justify-center">
+                <Logo 
+                  variant="main" 
+                  size="lg"
+                  className="rounded-xl border border-siso-orange/60 shadow-lg bg-black/40 p-2"
+                />
+              </div>
               <CardTitle className="text-2xl font-bold text-siso-text">
                 {isPartnerSignup 
                   ? (isSignUp ? 'Join SISO Partners' : 'Partner Portal')

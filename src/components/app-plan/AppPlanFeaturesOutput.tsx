@@ -213,7 +213,7 @@ export function AppPlanFeaturesOutput({ plan, isNewlyGenerated = false }: AppPla
               </p>
               
               <div className="flex gap-3">
-                <Button variant="outline" size="sm" className="border-gray-700 text-gray-300">
+                <Button variant="outline" size="sm" className="border-black text-black hover:bg-black hover:text-white">
                   <Download className="h-4 w-4 mr-2" />
                   Export Features
                 </Button>
